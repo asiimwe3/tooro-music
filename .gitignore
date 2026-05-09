@@ -14,3 +14,10 @@ web-build/
 .env.production
 android/
 ios/
+
+# Firebase — contains API keys, never commit
+google-services.json
+GoogleService-Info.plist
+
+# Google Play
+google-play-key.json
