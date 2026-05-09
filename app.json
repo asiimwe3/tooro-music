@@ -12,13 +12,19 @@
       "resizeMode": "contain",
       "backgroundColor": "#0A0A0F"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.tooro.music",
       "buildNumber": "1",
       "infoPlist": {
-        "UIBackgroundModes": ["audio", "fetch", "remote-notification"],
+        "UIBackgroundModes": [
+          "audio",
+          "fetch",
+          "remote-notification"
+        ],
         "NSMicrophoneUsageDescription": "Tooro Music needs microphone access for voice search.",
         "NSPhotoLibraryUsageDescription": "Tooro Music needs photo library access for profile pictures and uploads."
       }
@@ -92,9 +98,6 @@
     "extra": {
       "router": {
         "origin": false
-      },
-      "eas": {
-        "projectId": "tooro-music-project"
       }
     }
   }
