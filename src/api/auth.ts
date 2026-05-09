@@ -1,132 +1,77 @@
 // ============================================================
-// TOORO MUSIC - Auth API
+// TOORO MUSIC - Auth API (Firebase)
 // ============================================================
 
-import { supabase } from './supabase';
+import auth from '@react-native-firebase/auth';
+import { db } from './firebase';
 import { User } from '../types';
 
 export const authApi = {
   // Sign up with email/password
   signUp: async (email: string, password: string, fullName: string) => {
-    const { data, error } = await supabase.auth.signUp({
+    const userCredential = await auth().createUserWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+
+    // Update display name
+    await user.updateProfile({ displayName: fullName });
+
+    // Create profile in Firestore
+    await db.profiles().doc(user.uid).set({
+      id: user.uid,
+      full_name: fullName,
       email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-        },
-      },
+      avatar_url: null,
+      bio: null,
+      username: null,
+      is_artist: false,
+      is_admin: false,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     });
-    
-    if (error) throw error;
-    return data;
+
+    return userCredential;
   },
 
   // Sign in with email/password
   signIn: async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    
-    if (error) throw error;
-    return data;
-  },
-
-  // Sign in with Google
-  signInWithGoogle: async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: 'tooromusic://auth/callback',
-      },
-    });
-    
-    if (error) throw error;
-    return data;
-  },
-
-  // Sign in with phone
-  signInWithPhone: async (phone: string) => {
-    const { data, error } = await supabase.auth.signInWithOtp({
-      phone,
-    });
-    
-    if (error) throw error;
-    return data;
-  },
-
-  // Verify phone OTP
-  verifyPhone: async (phone: string, token: string) => {
-    const { data, error } = await supabase.auth.verifyOtp({
-      phone,
-      token,
-      type: 'sms',
-    });
-    
-    if (error) throw error;
-    return data;
+    const userCredential = await auth().signInWithEmailAndPassword(email, password);
+    return userCredential;
   },
 
   // Sign out
   signOut: async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    await auth().signOut();
   },
 
-  // Get current session
-  getSession: async () => {
-    const { data, error } = await supabase.auth.getSession();
-    if (error) throw error;
-    return data.session;
+  // Get current Firebase user
+  getCurrentUser: () => {
+    return auth().currentUser;
   },
 
-  // Get current user
-  getCurrentUser: async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (error) throw error;
-    return data.user;
-  },
-
-  // Get user profile
+  // Get user profile from Firestore
   getUserProfile: async (userId: string): Promise<User> => {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', userId)
-      .single();
-    
-    if (error) throw error;
-    return data as User;
+    const doc = await db.profiles().doc(userId).get();
+    if (!doc.exists) throw new Error('Profile not found');
+    return { id: doc.id, ...doc.data() } as User;
   },
 
   // Update user profile
   updateProfile: async (userId: string, updates: Partial<User>) => {
-    const { data, error } = await supabase
-      .from('users')
-      .update(updates)
-      .eq('id', userId)
-      .select()
-      .single();
-    
-    if (error) throw error;
-    return data as User;
+    await db.profiles().doc(userId).update({
+      ...updates,
+      updated_at: new Date().toISOString(),
+    });
+    const doc = await db.profiles().doc(userId).get();
+    return { id: doc.id, ...doc.data() } as User;
   },
 
   // Reset password
   resetPassword: async (email: string) => {
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'tooromusic://auth/reset-password',
-    });
-    
-    if (error) throw error;
-    return data;
+    await auth().sendPasswordResetEmail(email);
   },
 
-  // Subscribe to auth changes
-  onAuthStateChange: (callback: (session: any) => void) => {
-    return supabase.auth.onAuthStateChange((event, session) => {
-      callback(session);
-    });
+  // Listen to auth state changes
+  onAuthStateChange: (callback: (user: any) => void) => {
+    return auth().onAuthStateChanged(callback);
   },
 };
