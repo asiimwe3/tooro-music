@@ -15,7 +15,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.tooromusic.app",
+      "bundleIdentifier": "app.tooro.music",
       "buildNumber": "1",
       "infoPlist": {
         "UIBackgroundModes": ["audio", "fetch", "remote-notification"],
@@ -28,8 +28,9 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#0A0A0F"
       },
-      "package": "com.tooromusic.app",
+      "package": "app.tooro.music",
       "versionCode": 1,
+      "googleServicesFile": "./google-services.json",
       "permissions": [
         "android.permission.INTERNET",
         "android.permission.READ_EXTERNAL_STORAGE",
@@ -42,8 +43,7 @@
         "android.permission.VIBRATE",
         "android.permission.READ_MEDIA_AUDIO",
         "android.permission.READ_MEDIA_IMAGES"
-      ],
-      "googleServicesFile": "./google-services.json"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -53,6 +53,8 @@
     "plugins": [
       "expo-router",
       "expo-secure-store",
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
       [
         "expo-av",
         {
