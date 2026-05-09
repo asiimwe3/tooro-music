@@ -1,135 +1,102 @@
 // ============================================================
-// TOORO MUSIC - Playlists API
+// TOORO MUSIC - Playlists API (Firebase)
 // ============================================================
 
-import { supabase } from './supabase';
+import firestore from '@react-native-firebase/firestore';
+import { db } from './firebase';
 import { Playlist, Song } from '../types';
+import { songsApi } from './songs';
 
 export const playlistsApi = {
   // Get user's playlists
-  getUserPlaylists: async (userId: string) => {
-    const { data, error } = await supabase
-      .from('playlists')
-      .select('*, creator:users(id, full_name, avatar_url)')
-      .eq('creator_id', userId)
-      .order('updated_at', { ascending: false });
-    
-    if (error) throw error;
-    return data as Playlist[];
+  getUserPlaylists: async (userId: string): Promise<Playlist[]> => {
+    const snapshot = await db.playlists()
+      .where('user_id', '==', userId)
+      .orderBy('updated_at', 'desc')
+      .get();
+
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Playlist));
   },
 
   // Get public playlists
-  getPublicPlaylists: async (limit = 10) => {
-    const { data, error } = await supabase
-      .from('playlists')
-      .select('*, creator:users(id, full_name, avatar_url)')
-      .eq('is_public', true)
-      .order('followers_count', { ascending: false })
-      .limit(limit);
-    
-    if (error) throw error;
-    return data as Playlist[];
+  getPublic: async (limit = 20): Promise<Playlist[]> => {
+    const snapshot = await db.playlists()
+      .where('is_public', '==', true)
+      .orderBy('songs_count', 'desc')
+      .limit(limit)
+      .get();
+
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Playlist));
   },
 
-  // Get playlist by ID with songs
-  getById: async (id: string) => {
-    const { data, error } = await supabase
-      .from('playlists')
-      .select(`
-        *,
-        creator:users(id, full_name, avatar_url),
-        playlist_songs:playlist_songs(
-          *,
-          song:songs(*, artist:artists(id, name, avatar_url, verified))
-        )
-      `)
-      .eq('id', id)
-      .single();
-    
-    if (error) throw error;
-    return data as Playlist;
+  // Get playlist by ID
+  getById: async (id: string): Promise<Playlist> => {
+    const doc = await db.playlists().doc(id).get();
+    if (!doc.exists) throw new Error('Playlist not found');
+    return { id: doc.id, ...doc.data() } as Playlist;
   },
 
   // Create playlist
   create: async (data: {
-    title: string;
+    name: string;
+    user_id: string;
     description?: string;
-    creator_id: string;
-    is_public: boolean;
-    is_collaborative?: boolean;
-  }) => {
-    const { data: playlist, error } = await supabase
-      .from('playlists')
-      .insert({
-        ...data,
-        songs_count: 0,
-        followers_count: 0,
-      })
-      .select()
-      .single();
-    
-    if (error) throw error;
-    return playlist as Playlist;
+    is_public?: boolean;
+  }): Promise<Playlist> => {
+    const docRef = await db.playlists().add({
+      ...data,
+      cover_url: null,
+      songs_count: 0,
+      song_ids: [],
+      is_public: data.is_public ?? true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    });
+    const doc = await docRef.get();
+    return { id: doc.id, ...doc.data() } as Playlist;
   },
 
   // Add song to playlist
-  addSong: async (playlistId: string, songId: string, userId: string) => {
-    // Get current max position
-    const { data: existing } = await supabase
-      .from('playlist_songs')
-      .select('position')
-      .eq('playlist_id', playlistId)
-      .order('position', { ascending: false })
-      .limit(1);
-    
-    const nextPosition = (existing?.[0]?.position ?? -1) + 1;
-    
-    const { error } = await supabase
-      .from('playlist_songs')
-      .insert({
-        playlist_id: playlistId,
-        song_id: songId,
-        added_by: userId,
-        position: nextPosition,
-      });
-    
-    if (error) throw error;
-    
-    // Update songs count
-    await supabase.rpc('increment_playlist_songs', { playlist_id: playlistId });
+  addSong: async (playlistId: string, songId: string) => {
+    await db.playlists().doc(playlistId).update({
+      song_ids: firestore.FieldValue.arrayUnion(songId),
+      songs_count: firestore.FieldValue.increment(1),
+      updated_at: new Date().toISOString(),
+    });
   },
 
   // Remove song from playlist
   removeSong: async (playlistId: string, songId: string) => {
-    const { error } = await supabase
-      .from('playlist_songs')
-      .delete()
-      .eq('playlist_id', playlistId)
-      .eq('song_id', songId);
-    
-    if (error) throw error;
+    await db.playlists().doc(playlistId).update({
+      song_ids: firestore.FieldValue.arrayRemove(songId),
+      songs_count: firestore.FieldValue.increment(-1),
+      updated_at: new Date().toISOString(),
+    });
+  },
+
+  // Get songs in a playlist
+  getPlaylistSongs: async (playlistId: string): Promise<Song[]> => {
+    const playlist = await playlistsApi.getById(playlistId);
+    const songIds: string[] = (playlist as any).song_ids || [];
+    if (songIds.length === 0) return [];
+
+    const songs = await Promise.all(
+      songIds.map(id => songsApi.getById(id).catch(() => null))
+    );
+    return songs.filter(Boolean) as Song[];
   },
 
   // Update playlist
-  update: async (id: string, updates: Partial<Playlist>) => {
-    const { data, error } = await supabase
-      .from('playlists')
-      .update(updates)
-      .eq('id', id)
-      .select()
-      .single();
-    
-    if (error) throw error;
-    return data as Playlist;
+  update: async (playlistId: string, updates: Partial<Playlist>) => {
+    await db.playlists().doc(playlistId).update({
+      ...updates,
+      updated_at: new Date().toISOString(),
+    });
+    return playlistsApi.getById(playlistId);
   },
 
   // Delete playlist
-  delete: async (id: string) => {
-    const { error } = await supabase
-      .from('playlists')
-      .delete()
-      .eq('id', id);
-    
-    if (error) throw error;
+  delete: async (playlistId: string) => {
+    await db.playlists().doc(playlistId).delete();
   },
 };
