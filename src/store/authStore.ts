@@ -1,137 +1,96 @@
 // ============================================================
-// TOORO MUSIC - Auth Store (Zustand)
+// TOORO MUSIC - Auth Store (Firebase)
 // ============================================================
 
 import { create } from 'zustand';
-import { User } from '../types';
 import { authApi } from '../api/auth';
-import { supabase } from '../api/supabase';
+import { User } from '../types';
 
 interface AuthState {
   user: User | null;
-  session: any | null;
+  firebaseUser: any | null;
   isLoading: boolean;
-  isInitialized: boolean;
-  error: string | null;
-  
-  // Actions
-  initialize: () => Promise<void>;
-  signIn: (email: string, password: string) => Promise<void>;
+  isAuthenticated: boolean;
+
+  setFirebaseUser: (firebaseUser: any) => void;
+  setUser: (user: User | null) => void;
   signUp: (email: string, password: string, fullName: string) => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
+  signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  loadProfile: (userId: string) => Promise<void>;
   updateProfile: (updates: Partial<User>) => Promise<void>;
-  clearError: () => void;
+  initialize: () => () => void;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
-  session: null,
-  isLoading: false,
-  isInitialized: false,
-  error: null,
+  firebaseUser: null,
+  isLoading: true,
+  isAuthenticated: false,
 
-  initialize: async () => {
+  setFirebaseUser: (firebaseUser) => {
+    set({ firebaseUser, isAuthenticated: !!firebaseUser });
+  },
+
+  setUser: (user) => {
+    set({ user });
+  },
+
+  signUp: async (email, password, fullName) => {
+    set({ isLoading: true });
     try {
-      set({ isLoading: true });
-      
-      const session = await authApi.getSession();
-      
-      if (session?.user) {
-        try {
-          const profile = await authApi.getUserProfile(session.user.id);
-          set({ user: profile, session, isInitialized: true, isLoading: false });
-        } catch {
-          // Profile not created yet
-          set({ session, isInitialized: true, isLoading: false });
-        }
-      } else {
-        set({ isInitialized: true, isLoading: false });
-      }
-
-      // Listen for auth changes
-      authApi.onAuthStateChange(async (session) => {
-        if (session?.user) {
-          try {
-            const profile = await authApi.getUserProfile(session.user.id);
-            set({ user: profile, session });
-          } catch {
-            set({ session });
-          }
-        } else {
-          set({ user: null, session: null });
-        }
-      });
-    } catch (error: any) {
-      set({ error: error.message, isInitialized: true, isLoading: false });
+      const credential = await authApi.signUp(email, password, fullName);
+      const profile = await authApi.getUserProfile(credential.user.uid);
+      set({ user: profile, firebaseUser: credential.user, isAuthenticated: true });
+    } finally {
+      set({ isLoading: false });
     }
   },
 
   signIn: async (email, password) => {
-    set({ isLoading: true, error: null });
+    set({ isLoading: true });
     try {
-      const { session } = await authApi.signIn(email, password);
-      if (session?.user) {
-        const profile = await authApi.getUserProfile(session.user.id);
-        set({ user: profile, session, isLoading: false });
-      }
-    } catch (error: any) {
-      set({ error: error.message, isLoading: false });
-      throw error;
-    }
-  },
-
-  signUp: async (email, password, fullName) => {
-    set({ isLoading: true, error: null });
-    try {
-      const { session } = await authApi.signUp(email, password, fullName);
-      if (session?.user) {
-        // Create user profile
-        const profile = await authApi.getUserProfile(session.user.id);
-        set({ user: profile, session, isLoading: false });
-      } else {
-        set({ isLoading: false });
-      }
-    } catch (error: any) {
-      set({ error: error.message, isLoading: false });
-      throw error;
-    }
-  },
-
-  signInWithGoogle: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      await authApi.signInWithGoogle();
+      const credential = await authApi.signIn(email, password);
+      const profile = await authApi.getUserProfile(credential.user.uid);
+      set({ user: profile, firebaseUser: credential.user, isAuthenticated: true });
+    } finally {
       set({ isLoading: false });
-    } catch (error: any) {
-      set({ error: error.message, isLoading: false });
-      throw error;
     }
   },
 
   signOut: async () => {
-    set({ isLoading: true });
+    await authApi.signOut();
+    set({ user: null, firebaseUser: null, isAuthenticated: false });
+  },
+
+  loadProfile: async (userId) => {
     try {
-      await authApi.signOut();
-      set({ user: null, session: null, isLoading: false });
-    } catch (error: any) {
-      set({ error: error.message, isLoading: false });
+      const profile = await authApi.getUserProfile(userId);
+      set({ user: profile });
+    } catch (e) {
+      console.error('Failed to load profile:', e);
     }
   },
 
   updateProfile: async (updates) => {
     const { user } = get();
     if (!user) return;
-    
-    set({ isLoading: true });
-    try {
-      const updated = await authApi.updateProfile(user.id, updates);
-      set({ user: updated, isLoading: false });
-    } catch (error: any) {
-      set({ error: error.message, isLoading: false });
-      throw error;
-    }
+    const updated = await authApi.updateProfile(user.id, updates);
+    set({ user: updated });
   },
 
-  clearError: () => set({ error: null }),
+  // Initialize Firebase auth listener
+  initialize: () => {
+    set({ isLoading: true });
+    const unsubscribe = authApi.onAuthStateChange(async (firebaseUser) => {
+      if (firebaseUser) {
+        set({ firebaseUser, isAuthenticated: true });
+        await get().loadProfile(firebaseUser.uid);
+      } else {
+        set({ firebaseUser: null, user: null, isAuthenticated: false });
+      }
+      set({ isLoading: false });
+    });
+    return unsubscribe;
+  },
 }));
