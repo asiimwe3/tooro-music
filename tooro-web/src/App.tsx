@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAppStore } from "./store/appStore";
 import { BottomNav } from "./components/BottomNav";
 import { MiniPlayer } from "./components/MiniPlayer";
@@ -6,6 +7,7 @@ import { UploadModal } from "./components/UploadModal";
 import { PaymentModal } from "./components/PaymentModal";
 import { SideMenu } from "./components/SideMenu";
 import { AuthModal } from "./components/AuthModal";
+import { ShazamModal } from "./components/ShazamModal";
 import { HomePage } from "./pages/HomePage";
 import { DiscoverPage } from "./pages/DiscoverPage";
 import { TrendingPage } from "./pages/TrendingPage";
@@ -14,21 +16,23 @@ import { PremiumPage } from "./pages/PremiumPage";
 
 export default function App() {
   const { page } = useAppStore();
+  const [showShazam, setShowShazam] = useState(false);
 
   return (
     <div style={{ background: "#080811", minHeight: "100vh", color: "#fff", paddingBottom: 150 }}>
       <SideMenu />
       <AuthModal />
-      {page === "home" && <HomePage />}
+      {page === "home"     && <HomePage />}
       {page === "discover" && <DiscoverPage />}
       {page === "trending" && <TrendingPage />}
-      {page === "artist" && <ArtistPage />}
-      {page === "premium" && <PremiumPage />}
+      {page === "artist"   && <ArtistPage />}
+      {page === "premium"  && <PremiumPage />}
       <MiniPlayer />
-      <BottomNav />
+      <BottomNav onShazam={() => setShowShazam(true)} />
       <UploadModal />
       <PaymentModal />
       <Toast />
+      {showShazam && <ShazamModal onClose={() => setShowShazam(false)} />}
     </div>
   );
 }
