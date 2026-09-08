@@ -20,3 +20,4 @@ GoogleService-Info.plist
 
 # Google Play
 google-play-key.json
+.vercel
