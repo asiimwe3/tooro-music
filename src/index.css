@@ -72,7 +72,11 @@ body::after {
 
 #root { max-width: 480px; margin: 0 auto; min-height: 100vh; }
 
-button { font-family: inherit; cursor: pointer; }
+button {
+  font-family: inherit; cursor: pointer;
+  background: transparent; border: none; color: inherit;
+  -webkit-appearance: none; appearance: none; margin: 0;
+}
 input { font-family: inherit; }
 input::placeholder { color: var(--t3); }
 input:focus { border-color: rgba(167, 139, 250, 0.6) !important; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15); }
