@@ -20,12 +20,12 @@ export function DiscoverPage() {
     <div className="page">
       <div className="glass-dk sticky top-0 z-40" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)", borderRadius: 0 }}>
         <div className="px-4 py-3">
-          <div style={{ fontSize: 16, fontWeight: 900, color: "#F0F0FF", marginBottom: 10 }}>Discover</div>
+          <div className="page-title" style={{ marginBottom: 10 }}>Discover</div>
           <input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search songs, artists, genres…"
-            style={{ width: "100%", boxSizing: "border-box", background: "var(--surf)", border: "1.5px solid var(--bd)", borderRadius: 13, padding: "11px 14px", fontSize: 13.5, color: "#fff", outline: "none" }}
+            style={{ width: "100%", boxSizing: "border-box", background: "rgba(255,255,255,0.06)", border: "1.5px solid rgba(255,255,255,0.1)", borderRadius: 14, padding: "12px 16px", fontSize: 13.5, color: "#fff", outline: "none", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)" }}
           />
         </div>
       </div>

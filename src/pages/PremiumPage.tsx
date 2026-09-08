@@ -11,7 +11,7 @@ export function PremiumPage() {
           <span style={{ fontSize: 13 }}>👑</span>
           <span style={{ fontSize: 10.5, fontWeight: 900, color: "#F59E0B", letterSpacing: "0.1em" }}>TOORO PREMIUM</span>
         </div>
-        <h1 style={{ fontSize: 30, fontWeight: 900, color: "#F0F0FF", letterSpacing: "-0.02em", margin: "0 0 8px" }}>
+        <h1 style={{ fontFamily:"'Sora',sans-serif", fontSize: 31, fontWeight: 800, color: "#F4F1FF", letterSpacing: "-0.03em", margin: "0 0 8px" }}>
           Listen like <span className="grad-text">royalty</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--t2)", lineHeight: 1.6, maxWidth: 340, margin: "0 auto" }}>

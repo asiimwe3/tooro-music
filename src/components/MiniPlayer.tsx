@@ -82,7 +82,7 @@ export function MiniPlayer() {
           {/* Cover — real album art */}
           <div className="flex justify-center px-8" style={{ marginTop: 8, marginBottom: 24 }}>
             <div style={{ position: "relative" }}>
-              <div style={{ width: 260, height: 260, borderRadius: 28, overflow: "hidden", boxShadow: `0 32px 80px ${currentSong.color}40, 0 8px 24px rgba(0,0,0,0.6)` }}>
+              <div style={{ width: 262, height: 262, borderRadius: 30, overflow: "hidden", boxShadow: `0 36px 90px ${currentSong.color}50, 0 0 60px ${currentSong.color}30, 0 8px 24px rgba(0,0,0,0.6)`, border: `1px solid rgba(255,255,255,0.12)` }}>
                 <CoverArt seed={currentSong.title} color={currentSong.color} size={260} radius={0} imageUrl={coverUrl} />
               </div>
               {isPlaying && (
@@ -98,7 +98,7 @@ export function MiniPlayer() {
           {/* Song info */}
           <div className="px-6 mb-4 flex items-center justify-between">
             <div>
-              <div style={{ fontSize: 22, fontWeight: 900, color: "#F0F0FF", letterSpacing: "-0.02em" }}>{currentSong.title}</div>
+              <div style={{ fontFamily:"'Sora',sans-serif", fontSize: 23, fontWeight: 700, color: "#F4F1FF", letterSpacing: "-0.02em" }}>{currentSong.title}</div>
               <div style={{ fontSize: 14, color: "var(--t2)", marginTop: 3 }}>{currentSong.artist} · {currentSong.genre}</div>
             </div>
             <button style={{ width: 38, height: 38, borderRadius: 11, background: "var(--surf)", border: "1px solid var(--bd)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, color: "var(--t3)" }}>♡</button>
@@ -106,9 +106,9 @@ export function MiniPlayer() {
 
           {/* Progress */}
           <div className="px-6 mb-2">
-            <div style={{ height: 5, background: "rgba(255,255,255,0.08)", borderRadius: 100, cursor: "pointer", position: "relative", marginBottom: 8 }} onClick={seek}>
+            <div style={{ height: 5, background: "rgba(255,255,255,0.09)", borderRadius: 100, cursor: "pointer", position: "relative", marginBottom: 8 }} onClick={seek}>
               <div style={{ height: "100%", width: `${progress}%`, background: `linear-gradient(90deg,#9B6DFF,#FF6BA8)`, borderRadius: 100, transition: "width 0.1s linear" }} />
-              <div style={{ position: "absolute", top: "50%", left: `${progress}%`, transform: "translate(-50%,-50%)", width: 14, height: 14, borderRadius: "50%", background: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.4)", transition: "left 0.1s linear" }} />
+              <div style={{ position: "absolute", top: "50%", left: `${progress}%`, transform: "translate(-50%,-50%)", width: 15, height: 15, borderRadius: "50%", background: "#fff", boxShadow: "0 0 16px rgba(217,70,239,0.8), 0 2px 8px rgba(0,0,0,0.4)", transition: "left 0.1s linear" }} />
             </div>
             <div className="flex justify-between">
               <span style={{ fontSize: 11, color: "var(--t3)", fontWeight: 600 }}>{fmt(currentTime)}</span>
@@ -119,7 +119,7 @@ export function MiniPlayer() {
           {/* Controls */}
           <div className="flex items-center justify-between px-8 mb-5">
             <button className="pressable" onClick={prevSong} style={{ width: 48, height: 48, borderRadius: 14, background: "var(--surf)", border: "1px solid var(--bd)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, color: "var(--t2)" }}>⏮</button>
-            <button className="pressable" onClick={togglePlay} style={{ width: 68, height: 68, borderRadius: "50%", background: `linear-gradient(135deg,#9B6DFF,#5B21B6)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, boxShadow: "0 8px 28px rgba(155,109,255,0.45)" }}>{isPlaying ? "⏸" : "▶"}</button>
+            <button className="pressable" onClick={togglePlay} style={{ width: 68, height: 68, borderRadius: "50%", background: "conic-gradient(from 210deg, #8B5CF6, #D946EF, #F472B6, #8B5CF6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, boxShadow: "0 10px 34px rgba(139,92,246,0.55), inset 0 1px 0 rgba(255,255,255,0.3)" }}>{isPlaying ? "⏸" : "▶"}</button>
             <button className="pressable" onClick={nextSong} style={{ width: 48, height: 48, borderRadius: 14, background: "var(--surf)", border: "1px solid var(--bd)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, color: "var(--t2)" }}>⏭</button>
           </div>
 
@@ -143,16 +143,16 @@ export function MiniPlayer() {
 
       {/* ── Mini Player Bar ──────────────────────────────────────────────── */}
       <div style={{
-        position: "fixed", bottom: 58, left: 8, right: 8, zIndex: 90,
-        borderRadius: 22, overflow: "hidden",
-        background: "rgba(13,13,24,0.96)",
+        position: "fixed", bottom: 88, left: 12, right: 12, zIndex: 90,
+        borderRadius: 20, overflow: "hidden",
+        background: "rgba(13,11,26,0.88)",
         backdropFilter: "blur(28px) saturate(180%)",
         WebkitBackdropFilter: "blur(28px) saturate(180%)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        boxShadow: "0 -4px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05)",
+        border: "1px solid rgba(255,255,255,0.1)",
+        boxShadow: "0 18px 50px rgba(3,2,10,0.65), 0 0 30px rgba(139,92,246,0.12), inset 0 1px 0 rgba(255,255,255,0.08)",
       }}>
         {/* Progress line */}
-        <div style={{ height: 2, background: "rgba(255,255,255,0.06)", cursor: "pointer" }} onClick={seek}>
+        <div style={{ height: 3, background: "rgba(255,255,255,0.07)", cursor: "pointer" }} onClick={seek}>
           <div style={{ height: "100%", width: `${progress}%`, background: "linear-gradient(90deg,#9B6DFF,#FF6BA8)", transition: "width 0.1s linear" }} />
         </div>
 

@@ -16,17 +16,7 @@ export function BottomNav({ onShazam }: Props) {
   const { page, setPage } = useAppStore();
 
   return (
-    <nav
-      style={{
-        position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 100,
-        background: "rgba(7,7,15,0.92)",
-        backdropFilter: "blur(28px) saturate(160%)",
-        WebkitBackdropFilter: "blur(28px) saturate(160%)",
-        borderTop: "1px solid rgba(255,255,255,0.06)",
-        paddingBottom: "env(safe-area-inset-bottom,0)",
-        display: "flex", alignItems: "flex-end",
-      }}
-    >
+    <nav className="dock">
       {TABS.map((t) => {
         // ── Special Shazam centre button ──────────────────────────────
         if (t.id === "shazam") {
@@ -34,23 +24,26 @@ export function BottomNav({ onShazam }: Props) {
             <button
               key="shazam"
               onClick={onShazam}
+              className="pressable"
               style={{
                 flex: 1, display: "flex", flexDirection: "column",
                 alignItems: "center", justifyContent: "center", gap: 3,
                 padding: "0 4px 6px", position: "relative", marginBottom: 0,
               }}
             >
-              {/* Floating circle that lifts above nav */}
+              {/* Floating circle that lifts above the dock */}
               <div style={{
-                width: 54, height: 54, borderRadius: "50%",
-                background: "linear-gradient(135deg,#9B6DFF,#FF6BA8)",
+                width: 58, height: 58, borderRadius: "50%",
+                background: "conic-gradient(from 210deg, #8B5CF6, #D946EF, #F472B6, #8B5CF6)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                boxShadow: "0 0 24px rgba(155,109,255,0.55), 0 8px 24px rgba(0,0,0,0.5)",
-                marginTop: -20, // lifts above the nav bar
-                border: "3px solid rgba(7,7,15,0.9)",
+                boxShadow: "0 0 26px rgba(217,70,239,0.55), 0 10px 26px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.35)",
+                marginTop: -24, // lifts above the dock
+                border: "3px solid rgba(10,8,20,0.95)",
                 flexShrink: 0,
                 transition: "transform 0.15s",
-              }}>
+              }}
+              className="glow-pulse"
+              >
                 {/* S-wave icon */}
                 <svg width="26" height="26" viewBox="0 0 44 44" fill="none">
                   <path d="M28 13C26 11.5 23 11 20.5 12C17 13.5 15.5 17 17 20L20 23C22 25 21.5 28 19 29C17 30 14.5 29 13 27"
@@ -59,7 +52,7 @@ export function BottomNav({ onShazam }: Props) {
                     stroke="white" strokeWidth="3" strokeLinecap="round" />
                 </svg>
               </div>
-              <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.04em", color: "#9B6DFF" }}>
+              <span style={{ fontSize: 8.5, fontWeight: 800, letterSpacing: "0.12em", color: "#C4B5FD", marginTop: -2 }}>
                 IDENTIFY
               </span>
             </button>
@@ -74,25 +67,30 @@ export function BottomNav({ onShazam }: Props) {
             style={{
               flex: 1, display: "flex", flexDirection: "column", alignItems: "center",
               justifyContent: "center", gap: 4, padding: "10px 4px 8px",
-              position: "relative", transition: "all 0.2s",
+              position: "relative", transition: "all 0.25s cubic-bezier(0.2,0.8,0.2,1)",
             }}
           >
             {active && (
               <span style={{
-                position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
-                width: 28, height: 3, borderRadius: "0 0 4px 4px",
-                background: "linear-gradient(90deg,#9B6DFF,#FF6BA8)",
+                position: "absolute", top: 6, left: "50%", transform: "translateX(-50%)",
+                width: 34, height: 30, borderRadius: 12,
+                background: "linear-gradient(135deg, rgba(139,92,246,0.25), rgba(217,70,239,0.18))",
+                border: "1px solid rgba(167,139,250,0.25)",
+                boxShadow: "0 0 18px rgba(139,92,246,0.3)",
+                transition: "all 0.25s",
               }} />
             )}
             <span style={{
-              fontSize: 18, transition: "transform 0.2s",
-              transform: active ? "scale(1.15)" : "scale(1)",
-              filter: active ? "none" : "grayscale(0.4) opacity(0.5)",
+              fontSize: 17, position: "relative",
+              transition: "all 0.25s cubic-bezier(0.2,0.8,0.2,1)",
+              transform: active ? "translateY(-1px) scale(1.12)" : "scale(1)",
+              filter: active ? "drop-shadow(0 0 8px rgba(167,139,250,0.8))" : "grayscale(0.5) opacity(0.45)",
+              color: active ? "#C4B5FD" : "rgba(255,255,255,0.4)",
             }}>{t.icon}</span>
             <span style={{
-              fontSize: 9, fontWeight: 700, letterSpacing: "0.04em",
-              color: active ? "#C4A1FF" : "rgba(255,255,255,0.3)",
-              transition: "color 0.2s",
+              fontSize: 8.5, fontWeight: 800, letterSpacing: "0.08em", position: "relative",
+              color: active ? "#E9D5FF" : "rgba(255,255,255,0.3)",
+              transition: "color 0.25s",
             }}>{(t.label as string).toUpperCase()}</span>
           </button>
         );

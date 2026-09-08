@@ -19,7 +19,7 @@ export default function App() {
   const [showShazam, setShowShazam] = useState(false);
 
   return (
-    <div style={{ background: "#080811", minHeight: "100vh", color: "#fff", paddingBottom: 150 }}>
+    <div style={{ background: "transparent", minHeight: "100vh", color: "#fff", paddingBottom: 172 }}>
       <SideMenu />
       <AuthModal />
       {page === "home"     && <HomePage />}
