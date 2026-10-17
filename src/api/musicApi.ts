@@ -1,6 +1,6 @@
 // Tooro Music — Real data API from Base44 backend
 
-const BASE = "https://base44.app/api/apps/69ff30768e50f82540c24b7a/functions";
+const BASE = "https://base44.app/api/apps/6a06dff0946d9cf169ac63e2/functions";
 
 export interface RealArtist {
   id: string;
@@ -40,7 +40,7 @@ let _songs: RealSong[] | null = null;
 export async function fetchArtists(): Promise<RealArtist[]> {
   if (_artists) return _artists;
   try {
-    const res = await fetch(`${BASE}/musicData/artists`);
+    const res = await fetch(`${BASE}/musicArtists`);
     const data = await res.json();
     _artists = (data.data || []).filter((a: RealArtist) => a.isActive);
     return _artists!;
@@ -52,7 +52,7 @@ export async function fetchArtists(): Promise<RealArtist[]> {
 export async function fetchSongs(): Promise<RealSong[]> {
   if (_songs) return _songs;
   try {
-    const res = await fetch(`${BASE}/musicData/songs`);
+    const res = await fetch(`${BASE}/musicSongs`);
     const data = await res.json();
     _songs = (data.data || []).filter((s: RealSong) => s.isActive);
     return _songs!;
@@ -62,16 +62,8 @@ export async function fetchSongs(): Promise<RealSong[]> {
 }
 
 export async function fetchAll(): Promise<{ artists: RealArtist[]; songs: RealSong[] }> {
-  try {
-    const res = await fetch(`${BASE}/musicData`);
-    const data = await res.json();
-    _artists = (data.artists || []).filter((a: RealArtist) => a.isActive);
-    _songs = (data.songs || []).filter((s: RealSong) => s.isActive);
-    return { artists: _artists!, songs: _songs! };
-  } catch {
-    return { artists: [], songs: [] };
-  }
+  const [artists, songs] = await Promise.all([fetchArtists(), fetchSongs()]);
+  return { artists, songs };
 }
 
 // PesaPal payment
-export const PAYMENT_URL = "https://base44.app/api/apps/69ff30768e50f82540c24b7a/functions/pesapalPayment";

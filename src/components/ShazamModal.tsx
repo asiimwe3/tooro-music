@@ -83,6 +83,11 @@ export function ShazamModal({ onClose }: Props) {
           });
           const data = await res.json();
 
+          if (data.status === "error" && data.error?.error_code === 900) {
+            setState("error");
+            setError("Song recognition is almost live — one API key step remains. Coming soon!");
+            return;
+          }
           if (data.status === "success" && data.result) {
             const r = data.result;
             const deezer = r.deezer;
