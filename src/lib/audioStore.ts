@@ -110,3 +110,60 @@ export async function compressAudio(
   const blob = new Blob(chunks as BlobPart[], { type: "audio/mp3" });
   return { blob, duration: decoded.duration };
 }
+
+// ─── Fast-start playback cache (Deezer previews) ─────────────────────────────
+
+const CACHE_NAME = "tooro-audio-v1";
+const inflight = new Map<string, Promise<Blob | undefined>>();
+
+async function cacheOpen(): Promise<Cache | undefined> {
+  try { return await caches.open(CACHE_NAME); } catch { return undefined; }
+}
+
+async function fetchIntoCache(url: string): Promise<Blob | undefined> {
+  if (inflight.has(url)) return inflight.get(url);
+  const p = (async () => {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) return undefined;
+      const blob = await res.blob();
+      const c = await cacheOpen();
+      await c?.put(url, new Response(blob));
+      return blob;
+    } catch { return undefined; } finally { inflight.delete(url); }
+  })();
+  inflight.set(url, p);
+  return p;
+}
+
+/** Fire-and-forget prefetch so the next tap starts instantly. */
+export async function prefetchAudio(url: string): Promise<void> {
+  if (!url || url.startsWith("idb:") || url.startsWith("blob:")) return;
+  try {
+    const c = await cacheOpen();
+    if (c && (await c.match(url))) return; // already cached
+    await fetchIntoCache(url);
+  } catch { /* background best-effort */ }
+}
+
+/**
+ * Resolve a song's audio into the fastest playable source:
+ * IndexedDB blob (uploads) → cached preview blob → fetch & cache → raw URL fallback.
+ */
+export async function loadTrackSource(url: string): Promise<string> {
+  if (!url) return "";
+  if (url.startsWith("idb:")) {
+    const blob = await getAudio(url.slice(4));
+    return blob ? URL.createObjectURL(blob) : "";
+  }
+  try {
+    const c = await cacheOpen();
+    if (c) {
+      const hit = await c.match(url);
+      if (hit) return URL.createObjectURL(await hit.blob());
+    }
+    const blob = await fetchIntoCache(url);
+    if (blob) return URL.createObjectURL(blob);
+  } catch { /* fall through to direct streaming */ }
+  return url;
+}

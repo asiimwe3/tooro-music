@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppStore } from "../store/appStore";
-import { getAudio } from "../lib/audioStore";
+import { loadTrackSource, prefetchAudio } from "../lib/audioStore";
+import { SONGS } from "../data/mock";
 import { CoverArt } from "./CoverArt";
 
 const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2];
@@ -8,11 +9,33 @@ const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2];
 export function MiniPlayer() {
   const { currentSong, isPlaying, togglePlay, nextSong, prevSong, progress, setProgress, playbackSpeed, setPlaybackSpeed, favorites, toggleFavorite, showToast } = useAppStore();
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const objUrlRef = useRef<string | null>(null);
+  const warmedRef = useRef(false);
+
+  // Prefetch the next two catalog tracks so next/prev starts instantly
+  const prefetchNeighbors = (id: string) => {
+    const idx = SONGS.findIndex((s) => s.id === id);
+    if (idx < 0) return;
+    [SONGS[(idx + 1) % SONGS.length], SONGS[(idx + 2) % SONGS.length]].forEach((s) => {
+      const u = (s as any).audioUrl;
+      if (u && !u.startsWith("idb:")) prefetchAudio(u);
+    });
+  };
   const [expanded, setExpanded] = useState(false);
   const [showSpeed, setShowSpeed] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(0.85);
+
+  // Warm the first catalog tracks once so the very first tap is instant
+  useEffect(() => {
+    if (warmedRef.current) return;
+    warmedRef.current = true;
+    SONGS.slice(0, 3).forEach((s) => {
+      const u = (s as any).audioUrl;
+      if (u && !u.startsWith("idb:")) prefetchAudio(u);
+    });
+  }, []);
 
   useEffect(() => {
     const a = new Audio();
@@ -32,17 +55,16 @@ export function MiniPlayer() {
     if (!audioRef.current || !currentSong) return;
     const audio = audioRef.current;
     (async () => {
-      // Real URL from song data, or an IndexedDB blob for uploaded ("idb:") tracks
+      // Fast-start: cached blob (IndexedDB for uploads, Cache API for previews) or raw URL fallback
       const url = (currentSong as any).audioUrl || "";
-      let src = url;
-      if (url.startsWith("idb:")) {
-        const blob = await getAudio(url.slice(4));
-        src = blob ? URL.createObjectURL(blob) : "";
-      }
+      const src = await loadTrackSource(url);
+      if (objUrlRef.current && objUrlRef.current !== src) URL.revokeObjectURL(objUrlRef.current);
+      objUrlRef.current = src.startsWith("blob:") ? src : null;
       audio.src = src;
       audio.load();
       audio.playbackRate = playbackSpeed;
       if (isPlaying) audio.play().catch(() => {});
+      prefetchNeighbors(currentSong.id);
     })();
   }, [currentSong]);
 
