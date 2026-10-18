@@ -3,8 +3,33 @@ import { SONGS } from "../data/mock";
 import { onAuthChange, AuthUser } from "../api/firebase";
 
 type Song = (typeof SONGS)[0];
+
+export interface Upload {
+  id: string;
+  title: string;
+  artist: string;
+  artistId: string;
+  genre: string;
+  caption: string;
+  color: string;
+  seed: string;
+  duration: string;
+  plays: number;
+  likes: number;
+  comments: number;
+  createdAt: number;
+  isVideo?: boolean;
+}
+
+export function uploadToSong(u: Upload): Song {
+  return {
+    id: u.id, seed: u.seed, title: u.title, artist: u.artist, artistId: u.artistId,
+    genre: u.genre, duration: u.duration, plays: `${u.plays}`, color: u.color,
+    coverUrl: "", audioUrl: "",
+  } as unknown as Song;
+}
 type Page = "home" | "discover" | "trending" | "artist" | "premium" | "library" | "downloads" | "settings";
-type ArtistTab = "dashboard" | "upload" | "analytics" | "promote" | "monetize" | "collab" | "subscribe";
+type ArtistTab = "feed" | "profile" | "analytics" | "promote" | "monetize" | "collab" | "subscribe";
 
 interface AppState {
   page: Page;
@@ -49,6 +74,9 @@ interface AppState {
   toggleDownload: (id: string) => void;
   recentIds: string[];
   clearDownloads: () => void;
+  uploads: Upload[];
+  addUpload: (u: Omit<Upload, "id" | "createdAt" | "plays" | "likes" | "comments">) => Upload;
+  removeUpload: (id: string) => void;
 }
 
 function loadIds(key: string): string[] {
@@ -79,9 +107,26 @@ export const useAppStore = create<AppState>((set, get) => {
     },
     clearDownloads: () => { saveIds("tm_downloads", []); set({ downloads: [] }); },
     recentIds: loadIds("tm_recent"),
+    uploads: (() => { try { return JSON.parse(localStorage.getItem("tm_uploads") || "[]"); } catch { return []; } })(),
+    addUpload: (u) => {
+      const track: Upload = {
+        ...u,
+        id: "up_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+        createdAt: Date.now(),
+        plays: 0, likes: 0, comments: 0,
+      };
+      try { localStorage.setItem("tm_uploads", JSON.stringify([track, ...get().uploads])); } catch { /* full */ }
+      set({ uploads: [track, ...get().uploads] });
+      return track;
+    },
+    removeUpload: (id) => {
+      const next = get().uploads.filter((u) => u.id !== id);
+      try { localStorage.setItem("tm_uploads", JSON.stringify(next)); } catch { /* full */ }
+      set({ uploads: next });
+    },
     page: "home",
     setPage: (page) => set({ page }),
-    artistTab: "dashboard",
+    artistTab: "feed",
     setArtistTab: (artistTab) => set({ artistTab }),
     currentSong: null,
     isPlaying: false,

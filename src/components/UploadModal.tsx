@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { useAppStore } from "../store/appStore";
-import { GENRES } from "../data/mock";
+import { GENRES, ARTISTS } from "../data/mock";
+
+const CAPTION_CHIPS = ["#tooromusic", "#runyankole", "#afrobeat", "#ugandamusic", "#newmusic", "#fortportal"];
 
 export function UploadModal() {
-  const { uploadModal, closeUpload, showToast, user, setAuthModal } = useAppStore();
+  const { uploadModal, closeUpload, showToast, user, setAuthModal, addUpload, setArtistTab } = useAppStore();
   const [title, setTitle] = useState("");
   const [genre, setGenre] = useState("Afrobeat");
   const [file, setFile] = useState<string>("");
+  const [caption, setCaption] = useState("");
 
   if (uploadModal === "none") return null;
   const type = uploadModal; // "song" | "video"
@@ -14,10 +17,22 @@ export function UploadModal() {
   function submit() {
     if (!user) { closeUpload(); setAuthModal("login"); return; }
     if (!title.trim()) { showToast("Please enter a title"); return; }
+    const g = GENRES.find((x) => x.name === genre);
+    addUpload({
+      title: title.trim(),
+      artist: user.displayName || "You",
+      artistId: (ARTISTS[0] as any).id,
+      genre,
+      caption: caption.trim() || `New ${genre} from Tooro 🎶 #tooromusic #${genre.toLowerCase().replace(/\s/g, "")}`,
+      color: (g as any)?.color || "#38BDF8",
+      seed: title.trim().replace(/\s+/g, "-").toLowerCase(),
+      duration: "3:00",
+      isVideo: type === "video",
+    });
     closeUpload();
-    setTitle("");
-    setFile("");
-    showToast(`${type === "song" ? "Song" : "Video"} "${title}" received — our team reviews uploads within 48 hours.`);
+    setTitle(""); setFile(""); setCaption("");
+    setArtistTab("feed" as any);
+    showToast(`🎉 "${title.trim()}" is LIVE — it's now at the top of the Feed, Discover and Charts!`);
   }
 
   return (
@@ -29,7 +44,7 @@ export function UploadModal() {
           {type === "song" ? "🎵 Upload a Song" : "🎬 Upload a Video"}
         </div>
         <div style={{ fontSize: 12, color: "var(--t2)", marginBottom: 20, lineHeight: 1.5 }}>
-          Reach thousands of listeners across Western Uganda. Uploads are reviewed within 48 hours.
+          Post your sound to thousands of listeners across Western Uganda. Your track goes live *instantly* at the top of the Feed, Discover and Charts.
         </div>
 
         <label style={{ display: "block", fontSize: 11, fontWeight: 800, color: "var(--t2)", marginBottom: 6, letterSpacing: "0.05em" }}>TITLE</label>
@@ -44,13 +59,21 @@ export function UploadModal() {
           ))}
         </div>
 
+        <label style={{ display: "block", fontSize: 11, fontWeight: 800, color: "var(--t2)", marginBottom: 6, letterSpacing: "0.05em" }}>CAPTION & HASHTAGS</label>
+        <input value={caption} onChange={(e) => setCaption(e.target.value)} placeholder="Describe your track… add #hashtags" style={{ width: "100%", boxSizing: "border-box", background: "var(--surf)", border: "1.5px solid var(--bd)", borderRadius: 13, padding: "12px 14px", fontSize: 13.5, color: "#fff", marginBottom: 8, outline: "none" }} />
+        <div className="flex gap-2 flex-wrap" style={{ marginBottom: 16 }}>
+          {CAPTION_CHIPS.map((c) => (
+            <button key={c} onClick={() => setCaption((caption + " " + c).trim().replace(/\s+/g, " "))} className="pill pressable" style={{ background: "var(--surf)", borderColor: "var(--bd)", color: "var(--t2)", fontSize: 11 }}>{c}</button>
+          ))}
+        </div>
+
         <label style={{ display: "block", fontSize: 11, fontWeight: 800, color: "var(--t2)", marginBottom: 6, letterSpacing: "0.05em" }}>{type === "song" ? "AUDIO FILE (MP3/WAV)" : "VIDEO FILE (MP4)"}</label>
         <button onClick={() => setFile(type === "song" ? "track-demo.mp3" : "video-demo.mp4")} className="pressable" style={{ width: "100%", background: file ? "rgba(34,211,165,0.1)" : "var(--surf)", border: `1.5px dashed ${file ? "rgba(34,211,165,0.4)" : "var(--bd)"}`, borderRadius: 13, padding: "16px 14px", fontSize: 13, fontWeight: 700, color: file ? "#22D3A5" : "var(--t2)" }}>
           {file ? `✓ ${file} attached` : "＋ Choose file from device"}
         </button>
 
         <button onClick={submit} className="pressable" style={{ width: "100%", marginTop: 20, background: "linear-gradient(135deg,#38BDF8,#2DD4BF)", borderRadius: 14, padding: "14px 0", fontSize: 14, fontWeight: 900, color: "#fff", boxShadow: "0 8px 28px rgba(56, 189, 248,0.4)" }}>
-          Submit for Review
+          Post Now 🚀
         </button>
       </div>
     </div>

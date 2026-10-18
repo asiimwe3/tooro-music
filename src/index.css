@@ -420,3 +420,7 @@ input[type="range"]::-webkit-slider-thumb {
     max-width: none !important;
   }
 }
+
+@keyframes tt-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.tt-feed::-webkit-scrollbar { width: 0; }
+.tt-feed { scrollbar-width: none; }

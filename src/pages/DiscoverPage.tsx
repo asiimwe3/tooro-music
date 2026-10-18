@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { useAppStore } from "../store/appStore";
+import { useAppStore, uploadToSong } from "../store/appStore";
 import { CoverArt } from "../components/CoverArt";
 import { SONGS, ARTISTS, GENRES } from "../data/mock";
 
 export function DiscoverPage() {
-  const { searchQuery, setSearchQuery, selectedGenre, setSelectedGenre, playSong, currentSong, isPlaying, setPage, openUpload, favorites, toggleFavorite, downloads, toggleDownload } = useAppStore();
+  const { searchQuery, setSearchQuery, selectedGenre, setSelectedGenre, playSong, currentSong, isPlaying, setPage, openUpload, favorites, toggleFavorite, downloads, toggleDownload, uploads } = useAppStore();
   const [tab, setTab] = useState<"songs" | "artists">("songs");
 
   const q = searchQuery.trim().toLowerCase();
-  let songs = SONGS;
+  let songs: any[] = [...uploads.map(uploadToSong), ...SONGS];
   if (q) songs = songs.filter((s) => s.title.toLowerCase().includes(q) || s.artist.toLowerCase().includes(q) || s.genre.toLowerCase().includes(q));
   if (selectedGenre) songs = songs.filter((s) => s.genre === selectedGenre);
 

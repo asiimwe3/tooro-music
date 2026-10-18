@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAppStore } from "../store/appStore";
+import { useAppStore, uploadToSong } from "../store/appStore";
 import { CoverArt } from "../components/CoverArt";
 import { SONGS as MOCK_SONGS, ARTISTS as MOCK_ARTISTS, GENRES, PLAYLISTS } from "../data/mock";
 import { fetchAll, RealArtist, RealSong } from "../api/musicApi";
@@ -27,7 +27,7 @@ const QUICK_ACTIONS = [
 export function HomePage() {
   const {
     playSong, currentSong, isPlaying, progress, setPage, setSelectedGenre,
-    openUpload, setSideMenuOpen, user, setAuthModal, showToast,
+    openUpload, setSideMenuOpen, user, setAuthModal, showToast, uploads,
   } = useAppStore();
 
   const [artists, setArtists] = useState(MOCK_ARTISTS.map(a => ({ ...a, imageUrl: "", bio: "", location: "" })));
@@ -42,7 +42,7 @@ export function HomePage() {
     }).catch(() => setLoaded(true));
   }, []);
 
-  const heroSong: any = currentSong || songs[0];
+  const heroSong: any = uploads.length > 0 ? uploadToSong(uploads[0]) : (currentSong || songs[0]);
   const heroActive = !!currentSong && isPlaying;
   const heroDurSec = toSec(heroSong?.duration || "0:00");
   const heroElapsed = heroActive ? (progress / 100) * heroDurSec : 0;
@@ -124,6 +124,24 @@ export function HomePage() {
             </div>
           </div>
         </div>
+      )}
+
+      {uploads.length > 0 && (
+        <section className="px-4" style={{ paddingTop: 18 }}>
+          <div className="sec-hd"><span className="sec-title">🔥 Fresh from Tooro Artists</span><span className="sec-link pressable" onClick={() => setPage("artist" as any)}>Creator Studio</span></div>
+          <div className="flex gap-3 overflow-x-auto scrollbar-none" style={{ paddingBottom: 8 }}>
+            {uploads.slice(0, 8).map((u: any) => (
+              <div key={u.id} className="card-hover flex-shrink-0" style={{ width: 122 }} onClick={() => playSong(uploadToSong(u))}>
+                <div style={{ position: "relative" }}>
+                  <CoverArt seed={u.seed} color={u.color} size={122} radius={14} />
+                  <div style={{ position: "absolute", top: 7, left: 7, background: "linear-gradient(135deg,#FE2C55,#FF6BA8)", borderRadius: 6, fontSize: 8, fontWeight: 900, color: "#fff", padding: "2px 6px", letterSpacing: "0.06em" }}>NEW</div>
+                </div>
+                <div style={{ fontSize: 11.5, fontWeight: 800, color: "#EDF4FF", marginTop: 7, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{u.title}</div>
+                <div style={{ fontSize: 10, color: "var(--t3)" }}>{u.artist}</div>
+              </div>
+            ))}
+          </div>
+        </section>
       )}
 
       {/* ── Quick Actions Grid ───────────────────────────────────────────── */}

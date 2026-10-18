@@ -1,6 +1,6 @@
-import { useAppStore } from "../store/appStore";
 import { CoverArt } from "../components/CoverArt";
 import { SONGS, GENRES } from "../data/mock";
+import { useAppStore, uploadToSong } from "../store/appStore";
 import { useState } from "react";
 
 export function TrendingPage() {
@@ -8,10 +8,13 @@ export function TrendingPage() {
   const [range, setRange] = useState<"today" | "week" | "month">("week");
 
   // Rank songs by plays for the chart
-  const ranked = [...SONGS]
-    .sort((a, b) => parseInt(b.plays.replace(/\D/g, "")) - parseInt(a.plays.replace(/\D/g, "")))
-    .filter((s) => !selectedGenre || s.genre === selectedGenre)
-    .slice(0, 25);
+  const { uploads } = useAppStore();
+  const ranked: any[] = [
+    ...uploads.map(uploadToSong).filter((s: any) => !selectedGenre || s.genre === selectedGenre),
+    ...[...SONGS]
+      .sort((a, b) => parseInt(b.plays.replace(/\D/g, "")) - parseInt(a.plays.replace(/\D/g, "")))
+      .filter((s) => !selectedGenre || s.genre === selectedGenre),
+  ].slice(0, 25);
 
   return (
     <div className="page">
