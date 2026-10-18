@@ -379,3 +379,44 @@ input[type="range"]::-webkit-slider-thumb {
 .mb-5 { margin-bottom: 20px; }
 .pb-2 { padding-bottom: 8px; }
 .px-8 { padding-left: 32px; padding-right: 32px; }
+
+
+/* ── Desktop (≥1024px): full-screen app layout ─────────────────── */
+@media (min-width: 1024px) {
+  #root { max-width: none; margin: 0; }
+
+  .dock { display: none !important; }
+
+  .desktop-shell {
+    display: grid;
+    grid-template-columns: 290px minmax(0, 1fr);
+    min-height: 100vh;
+  }
+
+  .main-col {
+    min-width: 0;
+    padding-bottom: 150px; /* space for the fixed player bar */
+  }
+
+  .main-col > .page,
+  .main-col > .hero-bg {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Horizontal mobile rows become wrapping grids */
+  .overflow-x-auto {
+    overflow-x: visible !important;
+    flex-wrap: wrap !important;
+  }
+
+  /* Mini player becomes a full-width desktop player bar */
+  .mini-bar {
+    left: 290px !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    border-radius: 0 !important;
+    max-width: none !important;
+  }
+}

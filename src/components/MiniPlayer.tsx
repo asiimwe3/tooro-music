@@ -142,7 +142,7 @@ export function MiniPlayer() {
       )}
 
       {/* ── Mini Player Bar ──────────────────────────────────────────────── */}
-      <div style={{
+      <div className="mini-bar" style={{
         position: "fixed", bottom: 88, left: 12, right: 12, zIndex: 90,
         borderRadius: 20, overflow: "hidden",
         background: "rgba(13,11,26,0.88)",

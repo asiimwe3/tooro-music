@@ -1,7 +1,12 @@
 import { useAppStore } from "../store/appStore";
 import { signOut } from "../api/firebase";
 
-export function SideMenu() {
+interface Props {
+  persistent?: boolean;      // desktop: always visible, no overlay
+  onIdentify?: () => void;   // desktop: song recognition entry
+}
+
+export function SideMenu({ persistent, onIdentify }: Props) {
   const { sideMenuOpen, setSideMenuOpen, user, setAuthModal, setPage, showToast } = useAppStore();
 
   function go(page: "home" | "discover" | "trending" | "artist" | "premium") {
@@ -15,6 +20,7 @@ export function SideMenu() {
     { icon: "▲", label: "Charts", action: () => go("trending") },
     { icon: "🎤", label: "Artist Hub", action: () => go("artist") },
     { icon: "👑", label: "Go Premium", action: () => go("premium") },
+    ...(onIdentify ? [{ icon: "🔍", label: "Identify Song", action: onIdentify }] : []),
   ];
 
   const soonItems: { icon: string; label: string }[] = [
@@ -25,10 +31,16 @@ export function SideMenu() {
 
   return (
     <>
-      {sideMenuOpen && (
+      {!persistent && sideMenuOpen && (
         <div style={{ position: "fixed", inset: 0, zIndex: 340, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }} onClick={() => setSideMenuOpen(false)} />
       )}
-      <div style={{
+      <div style={persistent ? {
+        position: "sticky", top: 0, width: 290, height: "100vh", zIndex: 345,
+        background: "linear-gradient(180deg,#171129 0%,#0A0816 100%)",
+        borderRight: "1px solid rgba(155,109,255,0.18)",
+        transform: "translateX(0)",
+        display: "flex", flexDirection: "column",
+      } : {
         position: "fixed", top: 0, left: 0, bottom: 0, width: 290, zIndex: 345,
         background: "linear-gradient(180deg,#171129 0%,#0A0816 100%)",
         borderRight: "1px solid rgba(155,109,255,0.18)",
