@@ -14,6 +14,9 @@ import { DiscoverPage } from "./pages/DiscoverPage";
 import { TrendingPage } from "./pages/TrendingPage";
 import { ArtistPage } from "./pages/artist/ArtistPage";
 import { PremiumPage } from "./pages/PremiumPage";
+import { LibraryPage } from "./pages/LibraryPage";
+import { DownloadsPage } from "./pages/DownloadsPage";
+import { SettingsPage } from "./pages/SettingsPage";
 
 export default function App() {
   const { page } = useAppStore();
@@ -27,6 +30,9 @@ export default function App() {
       {page === "trending" && <TrendingPage />}
       {page === "artist"   && <ArtistPage />}
       {page === "premium"  && <PremiumPage />}
+      {page === "library"  && <LibraryPage />}
+      {page === "downloads" && <DownloadsPage />}
+      {page === "settings" && <SettingsPage />}
     </>
   );
 

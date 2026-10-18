@@ -52,8 +52,8 @@ export function HomePage() {
     if (key === "discover") setPage("discover");
     else if (key === "trending") setPage("trending");
     else if (key === "playlists") { const el = document.getElementById("top-playlists"); el?.scrollIntoView({ behavior: "smooth", block: "start" }); }
-    else if (key === "favorites") showToast("Favorites — coming soon 💜");
-    else if (key === "offline") showToast("Offline downloads — coming soon ⬇");
+    else if (key === "favorites") setPage("library" as any);
+    else if (key === "offline") setPage("downloads" as any);
   }
 
   return (

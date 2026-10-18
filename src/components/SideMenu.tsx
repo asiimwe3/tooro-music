@@ -23,10 +23,10 @@ export function SideMenu({ persistent, onIdentify }: Props) {
     ...(onIdentify ? [{ icon: "🔍", label: "Identify Song", action: onIdentify }] : []),
   ];
 
-  const soonItems: { icon: string; label: string }[] = [
-    { icon: "🎧", label: "My Library" },
-    { icon: "⬇", label: "Downloads" },
-    { icon: "⚙", label: "Settings" },
+  const soonItems: { icon: string; label: string; action: () => void }[] = [
+    { icon: "🎧", label: "My Library", action: () => go("library" as any) },
+    { icon: "⬇", label: "Downloads", action: () => go("downloads" as any) },
+    { icon: "⚙", label: "Settings", action: () => go("settings" as any) },
   ];
 
   return (
@@ -85,7 +85,7 @@ export function SideMenu({ persistent, onIdentify }: Props) {
           <div style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "12px 8px", borderRadius: 2 }} />
 
           {soonItems.map((it) => (
-            <button key={it.label} onClick={() => { showToast(`${it.label} is coming soon — stay tuned!`); setSideMenuOpen(false); }} className="pressable side-item" style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", borderRadius: 13, background: "transparent", border: "none", fontSize: 14, fontWeight: 700, color: "var(--t3)", textAlign: "left" }}>
+            <button key={it.label} onClick={() => { it.action(); }} className="pressable side-item" style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", borderRadius: 13, background: "transparent", border: "none", fontSize: 14, fontWeight: 700, color: "var(--t3)", textAlign: "left" }}>
               <span style={{ fontSize: 17, width: 24, textAlign: "center" }}>{it.icon}</span> {it.label}
             </button>
           ))}

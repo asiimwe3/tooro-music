@@ -5,7 +5,7 @@ import { CoverArt } from "./CoverArt";
 const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
 export function MiniPlayer() {
-  const { currentSong, isPlaying, togglePlay, nextSong, prevSong, progress, setProgress, playbackSpeed, setPlaybackSpeed } = useAppStore();
+  const { currentSong, isPlaying, togglePlay, nextSong, prevSong, progress, setProgress, playbackSpeed, setPlaybackSpeed, favorites, toggleFavorite, showToast } = useAppStore();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [expanded, setExpanded] = useState(false);
   const [showSpeed, setShowSpeed] = useState(false);
@@ -171,6 +171,9 @@ export function MiniPlayer() {
             <div style={{ fontSize: 13, fontWeight: 800, color: "#F0F0FF", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{currentSong.title}</div>
             <div style={{ fontSize: 11, color: "var(--t2)", marginTop: 1 }}>{currentSong.artist}</div>
           </div>
+
+          {/* Favorite */}
+          <button className="pressable" onClick={() => { const id = (currentSong as any).id; toggleFavorite(id); showToast(favorites.includes(id) ? "Removed from favorites" : "Added to favorites ♡"); }} style={{ width: 34, height: 34, borderRadius: 10, background: "var(--surf)", border: "1px solid var(--bd)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, color: favorites.includes((currentSong as any).id) ? "#FF6BA8" : "var(--t2)" }}>{favorites.includes((currentSong as any).id) ? "♥" : "♡"}</button>
 
           {/* Speed badge */}
           <div style={{ position: "relative" }}>

@@ -4,7 +4,7 @@ import { CoverArt } from "../components/CoverArt";
 import { SONGS, ARTISTS, GENRES } from "../data/mock";
 
 export function DiscoverPage() {
-  const { searchQuery, setSearchQuery, selectedGenre, setSelectedGenre, playSong, currentSong, isPlaying, setPage, openUpload } = useAppStore();
+  const { searchQuery, setSearchQuery, selectedGenre, setSelectedGenre, playSong, currentSong, isPlaying, setPage, openUpload, favorites, toggleFavorite, downloads, toggleDownload } = useAppStore();
   const [tab, setTab] = useState<"songs" | "artists">("songs");
 
   const q = searchQuery.trim().toLowerCase();
@@ -73,7 +73,11 @@ export function DiscoverPage() {
                       </div>
                     </div>
                     <div style={{ fontSize: 12.5, fontWeight: 800, color: active ? "#C4A1FF" : "#F0F0FF", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.title}</div>
-                    <div style={{ fontSize: 10.5, color: "var(--t2)", marginTop: 2 }}>{s.artist}</div>
+                    <div className="flex items-center" style={{ marginTop: 4 }}>
+                      <div style={{ flex: 1, fontSize: 10.5, color: "var(--t2)" }}>{s.artist}</div>
+                      <button className="pressable" onClick={(e) => { e.stopPropagation(); toggleFavorite(s.id); }} style={{ fontSize: 12, color: favorites.includes(s.id) ? "#FF6BA8" : "var(--t3)", padding: "2px 4px" }}>{favorites.includes(s.id) ? "♥" : "♡"}</button>
+                      <button className="pressable" onClick={(e) => { e.stopPropagation(); toggleDownload(s.id); }} style={{ fontSize: 12, color: downloads.includes(s.id) ? "#22D3A5" : "var(--t3)", padding: "2px 4px" }}>{downloads.includes(s.id) ? "⬇✓" : "⬇"}</button>
+                    </div>
                   </div>
                 );
               })}

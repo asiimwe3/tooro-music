@@ -3,7 +3,7 @@ import { SONGS } from "../data/mock";
 import { onAuthChange, AuthUser } from "../api/firebase";
 
 type Song = (typeof SONGS)[0];
-type Page = "home" | "discover" | "trending" | "artist" | "premium";
+type Page = "home" | "discover" | "trending" | "artist" | "premium" | "library" | "downloads" | "settings";
 type ArtistTab = "dashboard" | "upload" | "analytics" | "promote" | "monetize" | "collab" | "subscribe";
 
 interface AppState {
@@ -43,6 +43,19 @@ interface AppState {
   setArtistView: (id: string | null) => void;
   pesapalModal: boolean;
   setPesapalModal: (v: boolean) => void;
+  favorites: string[];
+  toggleFavorite: (id: string) => void;
+  downloads: string[];
+  toggleDownload: (id: string) => void;
+  recentIds: string[];
+  clearDownloads: () => void;
+}
+
+function loadIds(key: string): string[] {
+  try { return JSON.parse(localStorage.getItem(key) || "[]"); } catch { return []; }
+}
+function saveIds(key: string, ids: string[]) {
+  try { localStorage.setItem(key, JSON.stringify(ids)); } catch { /* private mode */ }
 }
 
 export const useAppStore = create<AppState>((set, get) => {
@@ -50,6 +63,22 @@ export const useAppStore = create<AppState>((set, get) => {
   onAuthChange((user) => set({ user }));
 
   return {
+    favorites: loadIds("tm_favorites"),
+    toggleFavorite: (id) => {
+      const cur = get().favorites;
+      const next = cur.includes(id) ? cur.filter((f) => f !== id) : [id, ...cur];
+      saveIds("tm_favorites", next);
+      set({ favorites: next });
+    },
+    downloads: loadIds("tm_downloads"),
+    toggleDownload: (id) => {
+      const cur = get().downloads;
+      const next = cur.includes(id) ? cur.filter((d) => d !== id) : [id, ...cur];
+      saveIds("tm_downloads", next);
+      set({ downloads: next });
+    },
+    clearDownloads: () => { saveIds("tm_downloads", []); set({ downloads: [] }); },
+    recentIds: loadIds("tm_recent"),
     page: "home",
     setPage: (page) => set({ page }),
     artistTab: "dashboard",
@@ -58,7 +87,12 @@ export const useAppStore = create<AppState>((set, get) => {
     isPlaying: false,
     progress: 0,
     playbackSpeed: 1,
-    playSong: (song) => set({ currentSong: song, isPlaying: true, progress: 0 }),
+    playSong: (song) => {
+      const { recentIds } = get();
+      const nextRecent = [song.id, ...recentIds.filter((r) => r !== song.id)].slice(0, 12);
+      saveIds("tm_recent", nextRecent);
+      set({ currentSong: song, isPlaying: true, progress: 0, recentIds: nextRecent });
+    },
     togglePlay: () => set((s) => ({ isPlaying: !s.isPlaying })),
     nextSong: () => {
       const { currentSong } = get();
