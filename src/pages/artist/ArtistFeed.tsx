@@ -118,10 +118,8 @@ export function ArtistFeed() {
   const base = [
     ...uploads.map((u) => ({ ...u, kind: "upload" as const })),
     ...SONGS.slice(0, 30).map((s) => ({
-      id: s.id, title: s.title, artist: s.artist, artistId: (s as any).artistId,
-      genre: s.genre,
+      ...s, // keep audioUrl, dzId, coverUrl etc. so the player can actually resolve and stream the track
       caption: CAPTION_TEMPLATES[hash(s.title) % CAPTION_TEMPLATES.length](s.genre || "Afrobeat"),
-      color: s.color, seed: (s as any).seed || s.title, duration: s.duration,
       plays: parseInt(String(s.plays).replace(/\D/g, "")) * 1000,
       likes: Math.round(parseInt(String(s.plays).replace(/\D/g, "")) * 0.6),
       comments: Math.round(parseInt(String(s.plays).replace(/\D/g, "")) * 0.1),
@@ -194,7 +192,7 @@ function FeedCard({ item: it, playSong, currentSong, isPlaying, favorites, toggl
   const isNew = it.kind === "upload";
   const seeded = useRef<Comment[]>(seededComments(it.id)).current;
   const allComments: Comment[] = [...userComments, ...seeded];
-  const song = it.kind === "upload" ? uploadToSong(uploads.find((u: any) => u.id === it.id)) : { ...it, plays: String(it.plays), audioUrl: undefined, coverUrl: undefined };
+  const song = it.kind === "upload" ? uploadToSong(uploads.find((u: any) => u.id === it.id)) : { ...it, plays: String(it.plays) };
 
   function addComment() {
     if (!draft.trim()) return;
