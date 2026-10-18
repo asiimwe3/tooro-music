@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppStore } from "../store/appStore";
 import { loadTrackSource, prefetchAudio } from "../lib/audioStore";
+import { ensureYT, resolveFullTrack, fullCacheGet, autoFullEnabled } from "../lib/fullTrack";
 import { SONGS } from "../data/mock";
 import { CoverArt } from "./CoverArt";
 
@@ -11,6 +12,12 @@ export function MiniPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const objUrlRef = useRef<string | null>(null);
   const warmedRef = useRef(false);
+  const ytRef = useRef<any>(null);
+  const ytDivRef = useRef<HTMLDivElement | null>(null);
+  const watchRef = useRef<any>(null);
+  const seekedRef = useRef(false);
+  const [fullId, setFullId] = useState<string | null>(null);
+  const [fullAvail, setFullAvail] = useState<string | null>(null);
 
   // Prefetch the next two catalog tracks so next/prev starts instantly
   const prefetchNeighbors = (id: string) => {
@@ -21,6 +28,29 @@ export function MiniPlayer() {
       if (u && !u.startsWith("idb:")) prefetchAudio(u);
     });
   };
+  // ── Full-length (YouTube) mode helpers ─────────────────────────────────
+  const stopWatchdog = () => { if (watchRef.current) { clearTimeout(watchRef.current); watchRef.current = null; } };
+
+  const exitFull = (silent = false) => {
+    stopWatchdog();
+    try { ytRef.current?.stopVideo?.(); } catch { /* ignore */ }
+    if (fullId) setFullId(null);
+    setFullAvail(null);
+    if (!silent) { const a = audioRef.current; if (a && useAppStore.getState().isPlaying) a.play().catch(() => {}); }
+  };
+
+  const enterFull = (videoId: string) => {
+    stopWatchdog();
+    setFullAvail(null);
+    setFullId(videoId);
+    seekedRef.current = false;
+    // Fallback watchdog: if the YouTube player hasn't started in time, resume the preview
+    watchRef.current = setTimeout(() => {
+      const st = (() => { try { return ytRef.current?.getPlayerState?.(); } catch { return -1; } })();
+      if (st !== 1) { exitFull(true); const a = audioRef.current; if (a && useAppStore.getState().isPlaying) a.play().catch(() => {}); showToast("Full song unavailable — playing preview"); }
+    }, 5000);
+  };
+
   const [expanded, setExpanded] = useState(false);
   const [showSpeed, setShowSpeed] = useState(false);
   const [duration, setDuration] = useState(0);
@@ -54,31 +84,142 @@ export function MiniPlayer() {
   useEffect(() => {
     if (!audioRef.current || !currentSong) return;
     const audio = audioRef.current;
+    const song = currentSong as any;
+    const alive = () => (useAppStore.getState().currentSong as any)?.id === song.id;
     (async () => {
+      // Reset full-length mode for the new song
+      stopWatchdog();
+      try { ytRef.current?.stopVideo?.(); } catch { /* ignore */ }
+      setFullId(null);
+      setFullAvail(null);
+
       // Fast-start: cached blob (IndexedDB for uploads, Cache API for previews) or raw URL fallback
-      const url = (currentSong as any).audioUrl || "";
+      const url = song.audioUrl || "";
       const src = await loadTrackSource(url);
+      if (!alive()) return;
       if (objUrlRef.current && objUrlRef.current !== src) URL.revokeObjectURL(objUrlRef.current);
       objUrlRef.current = src.startsWith("blob:") ? src : null;
       audio.src = src;
       audio.load();
       audio.playbackRate = playbackSpeed;
-      if (isPlaying) audio.play().catch(() => {});
-      prefetchNeighbors(currentSong.id);
+      if (useAppStore.getState().isPlaying) audio.play().catch(() => {});
+      prefetchNeighbors(song.id);
+
+      // Uploaded songs play from device storage — already full length
+      if (url.startsWith("idb:")) return;
+
+      // Catalog song: start resolving the full-length version in the background
+      const cached = fullCacheGet(song.id);
+      if (cached && cached !== "x") {
+        if (autoFullEnabled()) enterFull(cached);
+        else setFullAvail(cached);
+        return;
+      }
+      resolveFullTrack(song).then((vid) => {
+        if (!alive() || !vid) return;
+        if (autoFullEnabled()) enterFull(vid);
+        else setFullAvail(vid);
+      });
+      // Also pre-resolve neighbors so skipping lands on a full track instantly
+      const idx = SONGS.findIndex((t: any) => t.id === song.id);
+      if (idx >= 0) {
+        [SONGS[(idx + 1) % SONGS.length], SONGS[(idx + 2) % SONGS.length]].forEach((t: any) => {
+          const c = fullCacheGet(t.id);
+          if (!c) resolveFullTrack(t).catch(() => {});
+        });
+      }
     })();
   }, [currentSong]);
 
   useEffect(() => {
+    if (fullId && ytRef.current?.getPlayerState !== undefined) {
+      try { if (isPlaying) ytRef.current.playVideo(); else ytRef.current.pauseVideo(); return; } catch { /* fall through */ }
+    }
     if (!audioRef.current) return;
     if (isPlaying) audioRef.current.play().catch(() => {}); else audioRef.current.pause();
-  }, [isPlaying]);
+  }, [isPlaying, fullId]);
 
-  useEffect(() => { if (audioRef.current) audioRef.current.playbackRate = playbackSpeed; }, [playbackSpeed]);
+  useEffect(() => {
+    try { ytRef.current?.setPlaybackRate?.(playbackSpeed); } catch { /* ignore */ }
+    if (audioRef.current && !fullId) audioRef.current.playbackRate = playbackSpeed;
+  }, [playbackSpeed, fullId]);
+
+  // Create / reuse the YouTube player when entering full mode
+  useEffect(() => {
+    if (!fullId) return;
+    let cancelled = false;
+    ensureYT().then((YT: any) => {
+      if (cancelled || !ytDivRef.current) return;
+      const reuse = (() => {
+        try {
+          const p = ytRef.current;
+          if (!p) return false;
+          const ifr = p.getIframe?.();
+          return !!(ifr && document.contains(ifr));
+        } catch { return false; }
+      })();
+      if (reuse) {
+        ytRef.current.loadVideoById(fullId);
+        if (isPlaying) try { ytRef.current.playVideo(); } catch { /* ignore */ }
+        return;
+      }
+      try { ytRef.current?.destroy?.(); } catch { /* ignore */ }
+      ytRef.current = new YT.Player(ytDivRef.current, {
+        videoId: fullId,
+        playerVars: { playsinline: 1, controls: 0, modestbranding: 1, rel: 0, iv_load_policy: 3 },
+        events: {
+          onStateChange: (e: any) => {
+            if (e.data === 1) {
+              // Playing: hand over from the preview, continuing at the same position
+              stopWatchdog();
+              const a = audioRef.current;
+              if (a && !a.paused && !seekedRef.current) {
+                const at = a.currentTime;
+                try { if (at > 0.5) ytRef.current.seekTo(at, true); } catch { /* ignore */ }
+                seekedRef.current = true;
+              }
+              if (a) a.pause();
+            } else if (e.data === 0) {
+              nextSong(); // ended
+            } else if (e.data === 2) {
+              // paused externally: reflect in UI
+            }
+          },
+          onError: () => { exitFull(true); const a = audioRef.current; if (a && useAppStore.getState().isPlaying) a.play().catch(() => {}); showToast("Full song unavailable — playing preview"); },
+        },
+      });
+      if (isPlaying) try { ytRef.current.playVideo(); } catch { /* ignore */ }
+    }).catch(() => {
+      exitFull(true);
+      const a = audioRef.current;
+      if (a && useAppStore.getState().isPlaying) a.play().catch(() => {});
+    });
+    return () => { cancelled = true; };
+  }, [fullId]);
+
+  // Poll YouTube progress while in full mode
+  useEffect(() => {
+    if (!fullId) return;
+    const iv = setInterval(() => {
+      try {
+        const p = ytRef.current;
+        if (!p?.getCurrentTime) return;
+        const t = p.getCurrentTime() || 0;
+        const d = p.getDuration() || 0;
+        if (d) { setProgress((t / d) * 100); setCurrentTime(t); setDuration(d); }
+      } catch { /* ignore */ }
+    }, 500);
+    return () => clearInterval(iv);
+  }, [fullId]);
 
   function seek(e: React.MouseEvent<HTMLDivElement>) {
-    if (!audioRef.current || !duration) return;
     const rect = e.currentTarget.getBoundingClientRect();
-    audioRef.current.currentTime = ((e.clientX - rect.left) / rect.width) * duration;
+    const frac = (e.clientX - rect.left) / rect.width;
+    if (fullId && ytRef.current?.seekTo && duration) {
+      try { ytRef.current.seekTo(frac * duration, true); return; } catch { /* fall through */ }
+    }
+    if (!audioRef.current || !duration) return;
+    audioRef.current.currentTime = frac * duration;
   }
 
   function fmt(s: number) {
@@ -106,7 +247,7 @@ export function MiniPlayer() {
           {/* Top row */}
           <div className="flex items-center justify-between px-5 py-3">
             <button onClick={() => setExpanded(false)} style={{ width: 36, height: 36, borderRadius: 11, background: "var(--surf)", border: "1px solid var(--bd)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, color: "var(--t2)" }}>↓</button>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", color: "var(--t2)" }}>NOW PLAYING</div>
+            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", color: fullId ? "#FF6B6B" : "var(--t2)" }}>{fullId ? "NOW PLAYING · FULL SONG" : "NOW PLAYING"}</div>
             <button style={{ width: 36, height: 36, borderRadius: 11, background: "var(--surf)", border: "1px solid var(--bd)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, color: "var(--t2)" }}>⋯</button>
           </div>
 
@@ -166,7 +307,7 @@ export function MiniPlayer() {
             </div>
             <div>
               <div className="label mb-2">🔊 Volume</div>
-              <input type="range" min={0} max={1} step={0.01} value={volume} onChange={e => { const v = parseFloat(e.target.value); setVolume(v); if (audioRef.current) audioRef.current.volume = v; }} style={{ width: "100%", accentColor: "#38BDF8" }} />
+              <input type="range" min={0} max={1} step={0.01} value={volume} onChange={e => { const v = parseFloat(e.target.value); setVolume(v); try { ytRef.current?.setVolume?.(v * 100); } catch { /* ignore */ } if (audioRef.current) audioRef.current.volume = v; }} style={{ width: "100%", accentColor: "#38BDF8" }} />
             </div>
           </div>
         </div>
@@ -188,19 +329,26 @@ export function MiniPlayer() {
         </div>
 
         <div className="flex items-center gap-3" style={{ padding: "10px 12px 12px" }}>
-          {/* Cover — real art */}
-          <div onClick={() => setExpanded(true)} style={{ cursor: "pointer", flexShrink: 0 }}>
-            {coverUrl ? (
+          {/* Cover — real art, or the YouTube player when a full song is playing */}
+          <div onClick={() => setExpanded(true)} style={{ cursor: "pointer", flexShrink: 0, width: 44, height: 44, borderRadius: 12, overflow: "hidden", position: "relative" }}>
+            <div ref={ytDivRef} style={{ position: "absolute", inset: 0, width: 44, height: 44, display: fullId ? "block" : "none" }} />
+            {!fullId && (coverUrl ? (
               <img src={coverUrl} alt={currentSong.title} style={{ width: 44, height: 44, borderRadius: 12, objectFit: "cover", boxShadow: `0 4px 12px ${currentSong.color}40` }} />
             ) : (
               <CoverArt seed={currentSong.title} color={currentSong.color} size={44} radius={12} />
-            )}
+            ))}
           </div>
 
           {/* Info */}
           <div onClick={() => setExpanded(true)} style={{ flex: 1, minWidth: 0, cursor: "pointer" }}>
             <div style={{ fontSize: 13, fontWeight: 800, color: "#EDF4FF", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{currentSong.title}</div>
-            <div style={{ fontSize: 11, color: "var(--t2)", marginTop: 1 }}>{currentSong.artist}</div>
+            <div style={{ fontSize: 11, color: "var(--t2)", marginTop: 1, display: "flex", alignItems: "center", gap: 4 }}>
+              <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{currentSong.artist}</span>
+              {fullId && <span style={{ flexShrink: 0, fontSize: 8.5, fontWeight: 900, letterSpacing: "0.06em", padding: "2px 5px", borderRadius: 5, background: "#FF000022", color: "#FF6B6B", border: "1px solid #FF000044" }}>FULL SONG</span>}
+              {!fullId && fullAvail && (
+                <button onClick={(e) => { e.stopPropagation(); enterFull(fullAvail); }} style={{ flexShrink: 0, fontSize: 8.5, fontWeight: 900, letterSpacing: "0.06em", padding: "2px 5px", borderRadius: 5, background: "#FF000022", color: "#FF6B6B", border: "1px solid #FF000044" }}>▶ FULL</button>
+              )}
+            </div>
           </div>
 
           {/* Favorite */}

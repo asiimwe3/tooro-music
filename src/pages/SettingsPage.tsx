@@ -1,10 +1,13 @@
+import { useState } from "react";
 import { useAppStore } from "../store/appStore";
 import { signOut } from "../api/firebase";
+import { autoFullEnabled } from "../lib/fullTrack";
 
 const SPEEDS = [0.75, 1, 1.25, 1.5];
 
 export function SettingsPage() {
   const { user, setAuthModal, playbackSpeed, setPlaybackSpeed, showToast, downloads, clearDownloads, favorites, setPage } = useAppStore();
+  const [autoFull, setAutoFull] = useState(autoFullEnabled());
 
   return (
     <div className="page">
@@ -42,7 +45,18 @@ export function SettingsPage() {
       {/* Playback */}
       <div className="px-4" style={{ paddingTop: 18 }}>
         <div className="sec-hd"><span className="sec-title">▶ Playback</span></div>
-        <div className="glow-card" style={{ padding: 16 }}>
+        <div className="glow-card" style={{ padding: 16, display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ width: 42, height: 42, borderRadius: 13, background: "linear-gradient(135deg,#FF0000,#8B0000)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 19, flexShrink: 0 }}>▶</div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 12.5, fontWeight: 800, color: "var(--t2)" }}>Play full songs</div>
+              <div style={{ fontSize: 10.5, color: "var(--t3)", marginTop: 2 }}>When a full-length version is available, the app switches from the 30s preview to the complete track.</div>
+            </div>
+            <button onClick={() => { const v = !autoFull; setAutoFull(v); localStorage.setItem("tm_autofull", v ? "1" : "0"); showToast(v ? "Full songs on — plays complete tracks when available" : "Full songs off — previews only"); }} className="pressable" style={{ width: 46, height: 26, borderRadius: 100, background: autoFull ? "linear-gradient(135deg,#38BDF8,#164E63)" : "var(--surf)", border: "1px solid var(--bd)", position: "relative", flexShrink: 0 }}>
+              <span style={{ position: "absolute", top: 3, left: autoFull ? 23 : 3, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.18s ease" }} />
+            </button>
+          </div>
+          <div style={{ height: 10 }} />
+          <div className="glow-card" style={{ padding: 16 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "var(--t2)" }}>Playback speed</div>
           <div className="flex gap-2" style={{ marginTop: 10 }}>
             {SPEEDS.map((s) => (
