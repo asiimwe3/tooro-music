@@ -48,7 +48,7 @@ export function DiscoverPage() {
       <div className="px-4" style={{ paddingTop: 8 }}>
         <div style={{ display: "inline-flex", background: "var(--surf)", border: "1px solid var(--bd)", borderRadius: 100, padding: 3 }}>
           {(["songs", "artists"] as const).map((t) => (
-            <button key={t} onClick={() => setTab(t)} className="pressable" style={{ padding: "7px 18px", borderRadius: 100, fontSize: 12, fontWeight: 800, background: tab === t ? "linear-gradient(135deg,#9B6DFF,#FF6BA8)" : "transparent", color: tab === t ? "#fff" : "var(--t2)", border: "none" }}>
+            <button key={t} onClick={() => setTab(t)} className="pressable" style={{ padding: "7px 18px", borderRadius: 100, fontSize: 12, fontWeight: 800, background: tab === t ? "linear-gradient(135deg,#38BDF8,#2DD4BF)" : "transparent", color: tab === t ? "#fff" : "var(--t2)", border: "none" }}>
               {t === "songs" ? "Songs" : "Artists"}
             </button>
           ))}
@@ -69,13 +69,13 @@ export function DiscoverPage() {
                     <div style={{ position: "relative", borderRadius: 18, overflow: "hidden", marginBottom: 10, boxShadow: `0 8px 24px ${s.color}28` }}>
                       <CoverArt seed={s.seed} color={s.color} size={160} radius={0} imageUrl={s.coverUrl} />
                       <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "flex-end", justifyContent: "flex-end", padding: 8 }}>
-                        <div className="play-btn" style={{ background: active ? "rgba(155,109,255,0.85)" : "rgba(0,0,0,0.55)" }}>{active ? "❚❚" : "▶"}</div>
+                        <div className="play-btn" style={{ background: active ? "rgba(56, 189, 248,0.85)" : "rgba(0,0,0,0.55)" }}>{active ? "❚❚" : "▶"}</div>
                       </div>
                     </div>
-                    <div style={{ fontSize: 12.5, fontWeight: 800, color: active ? "#C4A1FF" : "#F0F0FF", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.title}</div>
+                    <div style={{ fontSize: 12.5, fontWeight: 800, color: active ? "#67E8F9" : "#EDF4FF", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.title}</div>
                     <div className="flex items-center" style={{ marginTop: 4 }}>
                       <div style={{ flex: 1, fontSize: 10.5, color: "var(--t2)" }}>{s.artist}</div>
-                      <button className="pressable" onClick={(e) => { e.stopPropagation(); toggleFavorite(s.id); }} style={{ fontSize: 12, color: favorites.includes(s.id) ? "#FF6BA8" : "var(--t3)", padding: "2px 4px" }}>{favorites.includes(s.id) ? "♥" : "♡"}</button>
+                      <button className="pressable" onClick={(e) => { e.stopPropagation(); toggleFavorite(s.id); }} style={{ fontSize: 12, color: favorites.includes(s.id) ? "#2DD4BF" : "var(--t3)", padding: "2px 4px" }}>{favorites.includes(s.id) ? "♥" : "♡"}</button>
                       <button className="pressable" onClick={(e) => { e.stopPropagation(); toggleDownload(s.id); }} style={{ fontSize: 12, color: downloads.includes(s.id) ? "#22D3A5" : "var(--t3)", padding: "2px 4px" }}>{downloads.includes(s.id) ? "⬇✓" : "⬇"}</button>
                     </div>
                   </div>
@@ -95,7 +95,7 @@ export function DiscoverPage() {
                   <div style={{ width: "100%", aspectRatio: "1", borderRadius: 20, overflow: "hidden", marginBottom: 10, boxShadow: `0 8px 24px ${a.color}28`, border: `2px solid ${a.color}25` }}>
                     <CoverArt seed={a.name} color={a.color} size={220} radius={0} imageUrl={a.imageUrl} />
                   </div>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: "#F0F0FF", textAlign: "center" }}>{a.name}</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: "#EDF4FF", textAlign: "center" }}>{a.name}</div>
                   <div style={{ fontSize: 10.5, color: a.color, textAlign: "center", fontWeight: 700, marginTop: 2 }}>{a.genre} · {a.followers} fans</div>
                 </div>
               ))}
@@ -112,7 +112,7 @@ function EmptyState({ text, actionLabel, action }: { text: string; actionLabel: 
     <div style={{ textAlign: "center", padding: "60px 20px" }}>
       <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
       <div style={{ fontSize: 14, fontWeight: 700, color: "var(--t2)", marginBottom: 16 }}>{text}</div>
-      <button onClick={action} className="pressable" style={{ background: "linear-gradient(135deg,#9B6DFF,#FF6BA8)", borderRadius: 100, padding: "10px 22px", fontSize: 12.5, fontWeight: 900, color: "#fff", border: "none" }}>{actionLabel}</button>
+      <button onClick={action} className="pressable" style={{ background: "linear-gradient(135deg,#38BDF8,#2DD4BF)", borderRadius: 100, padding: "10px 22px", fontSize: 12.5, fontWeight: 900, color: "#fff", border: "none" }}>{actionLabel}</button>
     </div>
   );
 }

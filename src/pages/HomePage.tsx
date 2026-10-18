@@ -17,11 +17,11 @@ function toSec(t: string) { const [m,s] = (t||"0:00").split(":").map(Number); re
 function fmtSec(s: number) { s = Math.max(0, Math.floor(s)); return `${Math.floor(s/60)}:${(s%60).toString().padStart(2,"0")}`; }
 
 const QUICK_ACTIONS = [
-  { key: "discover",  label: "Discover",  sub: "New Music",  icon: "🎵", grad: "linear-gradient(135deg,#8B5CF6,#6D28D9)" },
+  { key: "discover",  label: "Discover",  sub: "New Music",  icon: "🎵", grad: "linear-gradient(135deg,#06B6D4,#6D28D9)" },
   { key: "trending",  label: "Trending",  sub: "Hot Now",    icon: "🔥", grad: "linear-gradient(135deg,#34D399,#059669)" },
   { key: "favorites", label: "Favorites", sub: "Your Library", icon: "♡", grad: "linear-gradient(135deg,#FBBF24,#EA580C)" },
   { key: "offline",   label: "Offline",   sub: "Save Music", icon: "⬇", grad: "linear-gradient(135deg,#38BDF8,#2563EB)" },
-  { key: "playlists", label: "Playlists", sub: "Your Mixes", icon: "☰", grad: "linear-gradient(135deg,#F472B6,#C026D3)" },
+  { key: "playlists", label: "Playlists", sub: "Your Mixes", icon: "☰", grad: "linear-gradient(135deg,#60A5FA,#C026D3)" },
 ] as const;
 
 export function HomePage() {
@@ -63,28 +63,28 @@ export function HomePage() {
       <header className="glass-dk sticky top-0 z-40" style={{ borderRadius:0 }}>
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <div style={{ width:38, height:38, borderRadius:13, background:"linear-gradient(135deg,#8B5CF6,#D946EF 55%,#F472B6)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:19, boxShadow:"0 6px 18px rgba(139,92,246,0.5), inset 0 1px 0 rgba(255,255,255,0.3)", flexShrink:0, border:"1px solid rgba(255,255,255,0.15)" }}>🎵</div>
+            <div style={{ width:38, height:38, borderRadius:13, background:"linear-gradient(135deg,#06B6D4,#3B82F6 55%,#60A5FA)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:19, boxShadow:"0 6px 18px rgba(6, 182, 212,0.5), inset 0 1px 0 rgba(255,255,255,0.3)", flexShrink:0, border:"1px solid rgba(255,255,255,0.15)" }}>🎵</div>
             <div>
-              <div style={{ fontFamily:"'Sora',sans-serif", fontSize:15.5, fontWeight:700, letterSpacing:"-0.01em", color:"#F4F1FF" }}>Tooro <span style={{ color:"#C4B5FD" }}>Music</span></div>
-              <div style={{ fontSize:8, fontWeight:800, letterSpacing:"0.2em", textTransform:"uppercase", color:"rgba(167,139,250,0.7)" }}>Western Uganda</div>
+              <div style={{ fontFamily:"'Sora',sans-serif", fontSize:15.5, fontWeight:700, letterSpacing:"-0.01em", color:"#EAF2FF" }}>Tooro <span style={{ color:"#A5F3FC" }}>Music</span></div>
+              <div style={{ fontSize:8, fontWeight:800, letterSpacing:"0.2em", textTransform:"uppercase", color:"rgba(103, 232, 249,0.7)" }}>Western Uganda</div>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <button onClick={() => setPage("discover")} className="pressable" style={{ width:36, height:36, borderRadius:"50%", background:"var(--surf)", border:"1.5px solid var(--bd)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:14, color:"var(--t2)" }}>◎</button>
             <button onClick={() => showToast("You're all caught up 🔔")} className="pressable" style={{ width:36, height:36, borderRadius:"50%", background:"var(--surf)", border:"1.5px solid var(--bd)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:14, color:"var(--t2)", position:"relative" }}>
               🔔
-              <span style={{ position:"absolute", top:7, right:8, width:7, height:7, borderRadius:"50%", background:"#F43F5E", border:"1.5px solid #0A0814" }} />
+              <span style={{ position:"absolute", top:7, right:8, width:7, height:7, borderRadius:"50%", background:"#F43F5E", border:"1.5px solid #050C17" }} />
             </button>
             {user ? (
-              <button onClick={() => setSideMenuOpen(true)} className="pressable" style={{ width:36, height:36, borderRadius:"50%", background:"linear-gradient(135deg,#8B5CF6,#F472B6)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:14, fontWeight:900, color:"#fff", boxShadow:"0 4px 12px rgba(139,92,246,0.4)", border:"2px solid rgba(196,181,253,0.5)" }}>
+              <button onClick={() => setSideMenuOpen(true)} className="pressable" style={{ width:36, height:36, borderRadius:"50%", background:"linear-gradient(135deg,#06B6D4,#60A5FA)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:14, fontWeight:900, color:"#fff", boxShadow:"0 4px 12px rgba(6, 182, 212,0.4)", border:"2px solid rgba(165, 243, 252,0.5)" }}>
                 {user.displayName?.charAt(0)?.toUpperCase() || "U"}
               </button>
             ) : (
-              <button onClick={() => setAuthModal("login")} className="pressable" style={{ width:36, height:36, borderRadius:"50%", background:"var(--surf)", border:"2px solid rgba(196,181,253,0.5)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:15, color:"var(--t2)" }}>👤</button>
+              <button onClick={() => setAuthModal("login")} className="pressable" style={{ width:36, height:36, borderRadius:"50%", background:"var(--surf)", border:"2px solid rgba(165, 243, 252,0.5)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:15, color:"var(--t2)" }}>👤</button>
             )}
           </div>
         </div>
-        <div style={{ height:1, background:"linear-gradient(90deg,transparent,rgba(139,92,246,0.4),rgba(244,114,182,0.4),transparent)" }} />
+        <div style={{ height:1, background:"linear-gradient(90deg,transparent,rgba(6, 182, 212,0.4),rgba(96, 165, 250,0.4),transparent)" }} />
       </header>
 
       {/* ── Now Playing Hero Card ────────────────────────────────────────── */}
@@ -95,7 +95,7 @@ export function HomePage() {
               <div style={{ borderRadius:16, overflow:"hidden", boxShadow:`0 10px 26px ${heroSong.color}45` }}>
                 <CoverArt seed={heroSong.seed} color={heroSong.color} size={92} radius={0} imageUrl={heroSong.imageUrl} />
               </div>
-              <div style={{ position:"absolute", inset:0, borderRadius:16, background:"rgba(8,6,16,0.28)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+              <div style={{ position:"absolute", inset:0, borderRadius:16, background:"rgba(5, 12, 24,0.28)", display:"flex", alignItems:"center", justifyContent:"center" }}>
                 <div style={{ width:34, height:34, borderRadius:"50%", background:"rgba(255,255,255,0.16)", border:"1.5px solid rgba(255,255,255,0.5)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, color:"#fff", backdropFilter:"blur(4px)" }}>
                   {heroActive ? "⏸" : "▶"}
                 </div>
@@ -103,7 +103,7 @@ export function HomePage() {
             </div>
             <div style={{ flex:1, minWidth:0, display:"flex", flexDirection:"column", justifyContent:"center" }}>
               <div className="flex items-center justify-between" style={{ marginBottom:8 }}>
-                <span style={{ display:"inline-flex", alignItems:"center", gap:5, background:"linear-gradient(100deg,rgba(139,92,246,0.35),rgba(217,70,239,0.25))", border:"1px solid rgba(196,181,253,0.35)", borderRadius:100, padding:"3px 10px", fontSize:9.5, fontWeight:800, color:"#E9D5FF", letterSpacing:"0.04em" }}>
+                <span style={{ display:"inline-flex", alignItems:"center", gap:5, background:"linear-gradient(100deg,rgba(6, 182, 212,0.35),rgba(59, 130, 246,0.25))", border:"1px solid rgba(165, 243, 252,0.35)", borderRadius:100, padding:"3px 10px", fontSize:9.5, fontWeight:800, color:"#CFFAFE", letterSpacing:"0.04em" }}>
                   {heroActive && <span style={{ display:"flex", gap:1.5, alignItems:"flex-end", height:8 }}>{[1,2,3].map(i=><span key={i} className="wave-bar" style={{ height:[5,8,4][i-1], animationDelay:`${(i-1)*0.15}s` }} />)}</span>}
                   {heroActive ? "NOW PLAYING" : "PLAY NOW"}
                 </span>
@@ -112,10 +112,10 @@ export function HomePage() {
                   <span style={{ fontSize:14, cursor:"pointer" }}>⋮</span>
                 </div>
               </div>
-              <div style={{ fontFamily:"'Sora',sans-serif", fontSize:16, fontWeight:700, color:"#F4F1FF", letterSpacing:"-0.01em", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{heroSong.title}</div>
+              <div style={{ fontFamily:"'Sora',sans-serif", fontSize:16, fontWeight:700, color:"#EAF2FF", letterSpacing:"-0.01em", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{heroSong.title}</div>
               <div style={{ fontSize:11.5, color:"var(--t2)", marginTop:2, marginBottom:9, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{heroSong.artist} · {heroSong.genre}</div>
               <div style={{ height:4, background:"rgba(255,255,255,0.08)", borderRadius:100, position:"relative", marginBottom:5 }}>
-                <div style={{ height:"100%", width:`${heroActive ? progress : 0}%`, background:"linear-gradient(90deg,#8B5CF6,#F472B6)", borderRadius:100 }} />
+                <div style={{ height:"100%", width:`${heroActive ? progress : 0}%`, background:"linear-gradient(90deg,#06B6D4,#60A5FA)", borderRadius:100 }} />
               </div>
               <div className="flex items-center justify-between">
                 <span style={{ fontSize:9.5, color:"var(--t3)", fontWeight:700 }}>{fmtSec(heroElapsed)}</span>
@@ -133,7 +133,7 @@ export function HomePage() {
             <button key={a.key} onClick={() => handleQuickAction(a.key)} className="pressable" style={{ background:"none", border:"none", display:"flex", flexDirection:"column", alignItems:"center", gap:6, padding:0 }}>
               <div style={{ width:48, height:48, borderRadius:16, background:a.grad, display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, color:"#fff", boxShadow:"0 6px 16px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.25)" }}>{a.icon}</div>
               <div style={{ textAlign:"center" }}>
-                <div style={{ fontSize:10.5, fontWeight:800, color:"#F0F0FF" }}>{a.label}</div>
+                <div style={{ fontSize:10.5, fontWeight:800, color:"#EDF4FF" }}>{a.label}</div>
                 <div style={{ fontSize:8, color:"var(--t3)", fontWeight:600, marginTop:1 }}>{a.sub}</div>
               </div>
             </button>
@@ -145,7 +145,7 @@ export function HomePage() {
       <section id="top-playlists" style={{ padding:"26px 0 4px" }}>
         <div className="sec-hd px-4">
           <span className="sec-title" style={{ display:"flex", alignItems:"center", gap:8 }}>
-            <span style={{ width:3, height:15, borderRadius:2, background:"linear-gradient(180deg,#8B5CF6,#F472B6)", display:"inline-block" }} />
+            <span style={{ width:3, height:15, borderRadius:2, background:"linear-gradient(180deg,#06B6D4,#60A5FA)", display:"inline-block" }} />
             Top Playlists
           </span>
           <button className="sec-link pressable">See All →</button>
@@ -155,7 +155,7 @@ export function HomePage() {
             <div key={pl.id} className="card-hover flex-shrink-0" style={{ width:150, position:"relative", marginBottom:14 }}>
               <div style={{ width:150, height:172, borderRadius:20, overflow:"hidden", position:"relative", boxShadow:`0 10px 28px ${pl.color}35` }}>
                 <CoverArt seed={pl.seed} color={pl.color} size={150} radius={0} />
-                <div style={{ position:"absolute", inset:0, background:"linear-gradient(180deg, transparent 40%, rgba(6,4,12,0.55) 75%, rgba(6,4,12,0.92) 100%)" }} />
+                <div style={{ position:"absolute", inset:0, background:"linear-gradient(180deg, transparent 40%, rgba(4, 12, 26,0.55) 75%, rgba(4, 12, 26,0.92) 100%)" }} />
                 <div style={{ position:"absolute", top:10, right:10, width:26, height:26, borderRadius:"50%", background:"rgba(0,0,0,0.4)", border:"1px solid rgba(255,255,255,0.2)", display:"flex", alignItems:"center", justifyContent:"center", backdropFilter:"blur(4px)" }}>
                   <span style={{ display:"flex", gap:1.5, alignItems:"center", height:10 }}>{[1,2,3].map(i=><span key={i} style={{ width:2, borderRadius:1, background:"#fff", height:[5,9,6][i-1], display:"block" }} />)}</span>
                 </div>
@@ -164,7 +164,7 @@ export function HomePage() {
                   <div style={{ fontSize:10.5, color:"rgba(255,255,255,0.65)", fontWeight:600, display:"flex", alignItems:"center", gap:4 }}>♫ {pl.count} tracks</div>
                 </div>
               </div>
-              <button onClick={() => setPage("discover")} className="pressable" style={{ position:"absolute", bottom:-14, right:12, width:36, height:36, borderRadius:"50%", background:"conic-gradient(from 210deg,#8B5CF6,#D946EF,#F472B6,#8B5CF6)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, color:"#fff", boxShadow:"0 6px 16px rgba(139,92,246,0.55), inset 0 1px 0 rgba(255,255,255,0.3)", border:"2.5px solid #0A0814" }}>▶</button>
+              <button onClick={() => setPage("discover")} className="pressable" style={{ position:"absolute", bottom:-14, right:12, width:36, height:36, borderRadius:"50%", background:"conic-gradient(from 210deg,#06B6D4,#3B82F6,#60A5FA,#06B6D4)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, color:"#fff", boxShadow:"0 6px 16px rgba(6, 182, 212,0.55), inset 0 1px 0 rgba(255,255,255,0.3)", border:"2.5px solid #050C17" }}>▶</button>
             </div>
           ))}
         </div>
@@ -177,7 +177,7 @@ export function HomePage() {
           <div style={{ width:46, height:46, borderRadius:14, background:"linear-gradient(135deg,#FBBF24,#EA580C)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:22, flexShrink:0, boxShadow:"0 8px 20px rgba(251,191,36,0.4), inset 0 1px 0 rgba(255,255,255,0.35)" }}>👑</div>
           <div style={{ flex:1, minWidth:0 }}>
             <div style={{ fontSize:8.5, fontWeight:800, letterSpacing:"0.14em", color:"#FBBF24", marginBottom:3 }}>UPGRADE TO</div>
-            <div style={{ fontFamily:"'Sora',sans-serif", fontSize:17, fontWeight:700, color:"#F4F1FF", marginBottom:4, letterSpacing:"-0.01em" }}>Go Premium</div>
+            <div style={{ fontFamily:"'Sora',sans-serif", fontSize:17, fontWeight:700, color:"#EAF2FF", marginBottom:4, letterSpacing:"-0.01em" }}>Go Premium</div>
             <div style={{ fontSize:10, color:"var(--t2)", fontWeight:600, lineHeight:1.4 }}>Ad-free · Offline · 320kbps quality<br/>+ Exclusive content</div>
           </div>
           <button className="pressable btn-grad" style={{ borderRadius:100, padding:"9px 15px", fontSize:11.5, fontWeight:800, flexShrink:0, display:"flex", alignItems:"center", gap:4 }}>Go Premium <span>›</span></button>
@@ -188,7 +188,7 @@ export function HomePage() {
       <section style={{ padding:"22px 0 4px" }}>
         <div className="sec-hd px-4">
           <span className="sec-title" style={{ display:"flex", alignItems:"center", gap:8 }}>
-            <span style={{ width:3, height:15, borderRadius:2, background:"linear-gradient(180deg,#8B5CF6,#F472B6)", display:"inline-block" }} />
+            <span style={{ width:3, height:15, borderRadius:2, background:"linear-gradient(180deg,#06B6D4,#60A5FA)", display:"inline-block" }} />
             Recently Played
           </span>
           <button className="sec-link pressable" onClick={() => setPage("trending")}>See All →</button>
@@ -204,12 +204,12 @@ export function HomePage() {
                   </div>
                   <div style={{ position:"absolute", top:6, right:6, width:20, height:20, borderRadius:"50%", background:"rgba(0,0,0,0.45)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, color:"#fff", backdropFilter:"blur(4px)" }}>⋮</div>
                   {active && (
-                    <div style={{ position:"absolute", inset:0, borderRadius:16, background:"rgba(139,92,246,0.28)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                    <div style={{ position:"absolute", inset:0, borderRadius:16, background:"rgba(6, 182, 212,0.28)", display:"flex", alignItems:"center", justifyContent:"center" }}>
                       <div style={{ display:"flex", gap:2, alignItems:"center", height:14 }}>{[1,2,3,4].map(i=><span key={i} className="wave-bar" style={{ height:[10,14,8,12][i-1], animationDelay:`${(i-1)*0.12}s` }} />)}</div>
                     </div>
                   )}
                 </div>
-                <div style={{ fontSize:11.5, fontWeight:800, color:"#F0F0FF", marginBottom:2, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{s.title}</div>
+                <div style={{ fontSize:11.5, fontWeight:800, color:"#EDF4FF", marginBottom:2, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{s.title}</div>
                 <div style={{ fontSize:9.5, color:"var(--t3)", fontWeight:600, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{s.artist}</div>
               </div>
             );
@@ -245,7 +245,7 @@ export function HomePage() {
                   <div style={{ position:"absolute", bottom:4, right:4, width:22, height:22, borderRadius:"50%", background:`linear-gradient(135deg,${a.color},${a.color}BB)`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, border:"2px solid var(--bg)", boxShadow:`0 2px 8px ${a.color}50` }}>✓</div>
                 )}
               </div>
-              <div style={{ fontFamily:"'Sora',sans-serif", fontSize:13, fontWeight:700, color:"#F4F1FF", textAlign:"center", marginBottom:2 }}>{a.name}</div>
+              <div style={{ fontFamily:"'Sora',sans-serif", fontSize:13, fontWeight:700, color:"#EAF2FF", textAlign:"center", marginBottom:2 }}>{a.name}</div>
               <div style={{ fontSize:10, color:"var(--t3)", textAlign:"center", fontWeight:600 }}>{a.genre}</div>
               <div style={{ fontSize:10, color:a.color, textAlign:"center", fontWeight:800, marginTop:4 }}>{a.followers}</div>
             </div>
@@ -268,8 +268,8 @@ export function HomePage() {
                   <div style={{ borderRadius:20, overflow:"hidden", boxShadow:`0 8px 24px ${s.color}30` }}>
                     <CoverArt seed={s.seed} color={s.color} size={148} radius={0} />
                   </div>
-                  <div style={{ position:"absolute", inset:0, borderRadius:20, background:active?"rgba(155,109,255,0.25)":"transparent", display:"flex", alignItems:"flex-end", justifyContent:"flex-end", padding:10, transition:"all 0.2s" }}>
-                    <div className="play-btn" style={{ background:active?"rgba(155,109,255,0.8)":"rgba(0,0,0,0.55)" }}>
+                  <div style={{ position:"absolute", inset:0, borderRadius:20, background:active?"rgba(56, 189, 248,0.25)":"transparent", display:"flex", alignItems:"flex-end", justifyContent:"flex-end", padding:10, transition:"all 0.2s" }}>
+                    <div className="play-btn" style={{ background:active?"rgba(56, 189, 248,0.8)":"rgba(0,0,0,0.55)" }}>
                       {active ? (
                         <div style={{ display:"flex", gap:2, alignItems:"center", height:14 }}>
                           {[1,2,3,4].map(i => <span key={i} className="wave-bar" style={{ height:[10,14,8,12][i-1], animationDelay:`${(i-1)*0.12}s` }} />)}
@@ -278,7 +278,7 @@ export function HomePage() {
                     </div>
                   </div>
                 </div>
-                <div style={{ fontSize:13, fontWeight:800, color:"#F0F0FF", marginBottom:3, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{s.title}</div>
+                <div style={{ fontSize:13, fontWeight:800, color:"#EDF4FF", marginBottom:3, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{s.title}</div>
                 <div style={{ fontSize:11, color:"var(--t2)", marginBottom:3 }}>{s.artist}</div>
                 <div style={{ fontSize:10, color:s.color, fontWeight:700 }}>▶ {s.plays}</div>
               </div>
@@ -298,7 +298,7 @@ export function HomePage() {
             const active = currentSong?.id===s.id && isPlaying;
             return (
               <div key={s.id} className="track-row" style={{ borderBottom:i<5?"1px solid rgba(255,255,255,0.04)":"none" }} onClick={() => playSong(s)}>
-                <div style={{ width:22, textAlign:"center", fontSize:12, fontWeight:800, color:active?"#9B6DFF":"var(--t3)" }}>
+                <div style={{ width:22, textAlign:"center", fontSize:12, fontWeight:800, color:active?"#38BDF8":"var(--t3)" }}>
                   {active ? (
                     <div style={{ display:"flex", gap:1.5, justifyContent:"center", alignItems:"flex-end", height:14 }}>
                       {[1,2,3].map(j => <span key={j} className="wave-bar" style={{ height:[10,14,8][j-1], animationDelay:`${(j-1)*0.15}s` }} />)}
@@ -307,7 +307,7 @@ export function HomePage() {
                 </div>
                 <CoverArt seed={s.seed} color={s.color} size={46} radius={12} />
                 <div style={{ flex:1, minWidth:0 }}>
-                  <div style={{ fontSize:13, fontWeight:800, color:active?"#C4A1FF":"#F0F0FF", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{s.title}</div>
+                  <div style={{ fontSize:13, fontWeight:800, color:active?"#67E8F9":"#EDF4FF", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{s.title}</div>
                   <div style={{ fontSize:11, color:"var(--t2)", marginTop:2 }}>{s.artist} · {s.genre}</div>
                 </div>
                 <div style={{ textAlign:"right", flexShrink:0 }}>

@@ -11,18 +11,18 @@ export function SongRow({ song, index }: { song: Song; index: number }) {
     <div
       onClick={() => playSong(song)}
       className="flex items-center gap-3 px-3 py-2.5 cursor-pointer relative"
-      style={{ borderBottom: "1px solid rgba(255,255,255,0.05)", background: active ? "rgba(124,58,237,0.12)" : "transparent" }}
+      style={{ borderBottom: "1px solid rgba(255,255,255,0.05)", background: active ? "rgba(14, 116, 144,0.12)" : "transparent" }}
     >
-      {active && <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-r" style={{ background: "#7C3AED" }} />}
-      <span className="w-4 text-center text-[9px] font-semibold" style={{ color: active ? "#9D4EDD" : "#55556A" }}>
+      {active && <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-r" style={{ background: "#0E7490" }} />}
+      <span className="w-4 text-center text-[9px] font-semibold" style={{ color: active ? "#0284C7" : "#46557A" }}>
         {active && isPlaying ? "♫" : index}
       </span>
       <CoverArt seed={song.title} color={song.color} size={44} radius={10} imageUrl={(song as any).coverUrl} />
       <div className="flex-1 min-w-0">
-        <div className="text-[12px] font-bold truncate" style={{ color: active ? "#9D4EDD" : "#fff" }}>{song.title}</div>
-        <div className="text-[10px] truncate mt-0.5" style={{ color: "#55556A" }}>{song.artist} · {song.genre}</div>
+        <div className="text-[12px] font-bold truncate" style={{ color: active ? "#0284C7" : "#fff" }}>{song.title}</div>
+        <div className="text-[10px] truncate mt-0.5" style={{ color: "#46557A" }}>{song.artist} · {song.genre}</div>
       </div>
-      <span className="text-[9px] flex-shrink-0" style={{ color: "#55556A" }}>{song.duration}</span>
+      <span className="text-[9px] flex-shrink-0" style={{ color: "#46557A" }}>{song.duration}</span>
     </div>
   );
 }

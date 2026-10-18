@@ -14,7 +14,7 @@ export function SettingsPage() {
           <div className="flex items-center gap-3">
             <div style={{ width: 38, height: 38, borderRadius: 13, background: "linear-gradient(135deg,#64748B,#334155 55%,#0F172A)", border: "1px solid rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 19, flexShrink: 0 }}>⚙</div>
             <div>
-              <div style={{ fontFamily: "'Sora',sans-serif", fontSize: 15.5, fontWeight: 700, color: "#F4F1FF" }}>Settings</div>
+              <div style={{ fontFamily: "'Sora',sans-serif", fontSize: 15.5, fontWeight: 700, color: "#EAF2FF" }}>Settings</div>
               <div style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(148,163,184,0.9)" }}>Your Preferences</div>
             </div>
           </div>
@@ -24,11 +24,11 @@ export function SettingsPage() {
       {/* Account */}
       <div className="px-4" style={{ paddingTop: 14 }}>
         <div className="glow-card" style={{ padding: 16, display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ width: 46, height: 46, borderRadius: "50%", background: "linear-gradient(135deg,#9B6DFF,#5B21B6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 900, flexShrink: 0 }}>
+          <div style={{ width: 46, height: 46, borderRadius: "50%", background: "linear-gradient(135deg,#38BDF8,#164E63)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 900, flexShrink: 0 }}>
             {user?.displayName?.charAt(0)?.toUpperCase() || "👤"}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 13.5, fontWeight: 800, color: "#F0F0FF", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{user?.displayName || "Guest listener"}</div>
+            <div style={{ fontSize: 13.5, fontWeight: 800, color: "#EDF4FF", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{user?.displayName || "Guest listener"}</div>
             <div style={{ fontSize: 11, color: "var(--t3)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{user?.email || "Not signed in"}</div>
           </div>
           {user ? (
@@ -46,7 +46,7 @@ export function SettingsPage() {
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "var(--t2)" }}>Playback speed</div>
           <div className="flex gap-2" style={{ marginTop: 10 }}>
             {SPEEDS.map((s) => (
-              <button key={s} onClick={() => { setPlaybackSpeed(s); showToast(`Speed set to ${s}x`); }} className="pressable" style={{ flex: 1, padding: "9px 0", borderRadius: 11, fontSize: 12, fontWeight: 800, background: playbackSpeed === s ? "linear-gradient(135deg,#9B6DFF,#5B21B6)" : "var(--surf)", border: playbackSpeed === s ? "none" : "1px solid var(--bd)", color: playbackSpeed === s ? "#fff" : "var(--t2)" }}>{s}x</button>
+              <button key={s} onClick={() => { setPlaybackSpeed(s); showToast(`Speed set to ${s}x`); }} className="pressable" style={{ flex: 1, padding: "9px 0", borderRadius: 11, fontSize: 12, fontWeight: 800, background: playbackSpeed === s ? "linear-gradient(135deg,#38BDF8,#164E63)" : "var(--surf)", border: playbackSpeed === s ? "none" : "1px solid var(--bd)", color: playbackSpeed === s ? "#fff" : "var(--t2)" }}>{s}x</button>
             ))}
           </div>
           <div style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "14px 0" }} />
@@ -81,7 +81,7 @@ export function SettingsPage() {
         <div className="sec-hd"><span className="sec-title">💬 Support</span></div>
         <div className="glow-card" style={{ padding: 16 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "var(--t2)" }}>WhatsApp support</div>
-          <div style={{ fontSize: 11, color: "var(--t3)", marginTop: 4 }}>Message us anytime: <span style={{ color: "#C4A1FF", fontWeight: 700 }}>+256 762 306 675</span></div>
+          <div style={{ fontSize: 11, color: "var(--t3)", marginTop: 4 }}>Message us anytime: <span style={{ color: "#67E8F9", fontWeight: 700 }}>+256 762 306 675</span></div>
           <div style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "14px 0" }} />
           <div className="flex items-center justify-between">
             <div>

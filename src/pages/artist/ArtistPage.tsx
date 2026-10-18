@@ -22,14 +22,14 @@ export function ArtistPage() {
     <div className="page">
       {/* Artist header */}
       <div style={{ padding: "22px 16px 0" }}>
-        <div style={{ borderRadius: 26, overflow: "hidden", padding: "22px 20px", background: `linear-gradient(135deg,${artist.color}25 0%,rgba(10,7,20,0.9) 60%)`, border: `1px solid ${artist.color}30`, position: "relative" }}>
+        <div style={{ borderRadius: 26, overflow: "hidden", padding: "22px 20px", background: `linear-gradient(135deg,${artist.color}25 0%,rgba(6, 16, 32,0.9) 60%)`, border: `1px solid ${artist.color}30`, position: "relative" }}>
           <div style={{ position: "absolute", top: -40, right: -30, width: 160, height: 160, borderRadius: "50%", background: `radial-gradient(circle,${artist.color}30,transparent 70%)` }} />
           <div style={{ display: "flex", alignItems: "center", gap: 16, position: "relative" }}>
             <div style={{ width: 74, height: 74, borderRadius: 22, overflow: "hidden", boxShadow: `0 10px 30px ${artist.color}40`, border: `2px solid ${artist.color}40` }}>
               <CoverArt seed={artist.name} color={artist.color} size={74} radius={0} imageUrl={artist.imageUrl} />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 19, fontWeight: 900, color: "#F0F0FF", display: "flex", alignItems: "center", gap: 6 }}>
+              <div style={{ fontSize: 19, fontWeight: 900, color: "#EDF4FF", display: "flex", alignItems: "center", gap: 6 }}>
                 {artist.name} {artist.verified && <span style={{ fontSize: 12, color: artist.color }}>✓</span>}
               </div>
               <div style={{ fontSize: 11.5, color: "var(--t2)", marginTop: 2, fontWeight: 600 }}>{artist.genre} · Artist Hub</div>
@@ -48,7 +48,7 @@ export function ArtistPage() {
           {TABS.map((t) => {
             const active = artistTab === t.id;
             return (
-              <button key={t.id} onClick={() => setArtistTab(t.id)} className="pill pressable" style={{ background: active ? "rgba(155,109,255,0.2)" : "var(--surf)", borderColor: active ? "rgba(155,109,255,0.55)" : "var(--bd)", color: active ? "#C4A1FF" : "var(--t2)", fontWeight: active ? 900 : 700, flexShrink: 0 }}>
+              <button key={t.id} onClick={() => setArtistTab(t.id)} className="pill pressable" style={{ background: active ? "rgba(56, 189, 248,0.2)" : "var(--surf)", borderColor: active ? "rgba(56, 189, 248,0.55)" : "var(--bd)", color: active ? "#67E8F9" : "var(--t2)", fontWeight: active ? 900 : 700, flexShrink: 0 }}>
                 <span style={{ fontSize: 13 }}>{t.icon}</span><span>{t.label}</span>
               </button>
             );
@@ -72,9 +72,9 @@ export function ArtistPage() {
             ].map((p) => (
               <div key={p.name} className="glass-card" style={{ padding: 16 }}>
                 <div style={{ fontSize: 26, marginBottom: 8 }}>{p.icon}</div>
-                <div style={{ fontSize: 13.5, fontWeight: 800, color: "#F0F0FF", marginBottom: 4 }}>{p.name}</div>
+                <div style={{ fontSize: 13.5, fontWeight: 800, color: "#EDF4FF", marginBottom: 4 }}>{p.name}</div>
                 <div style={{ fontSize: 11, color: "var(--t2)", lineHeight: 1.5, marginBottom: 10 }}>{p.desc}</div>
-                <button onClick={() => openPayment(p.name, p.price)} className="pressable" style={{ width: "100%", background: "rgba(155,109,255,0.15)", border: "1.5px solid rgba(155,109,255,0.35)", borderRadius: 10, padding: "8px 0", fontSize: 11.5, fontWeight: 800, color: "#C4A1FF" }}>
+                <button onClick={() => openPayment(p.name, p.price)} className="pressable" style={{ width: "100%", background: "rgba(56, 189, 248,0.15)", border: "1.5px solid rgba(56, 189, 248,0.35)", borderRadius: 10, padding: "8px 0", fontSize: 11.5, fontWeight: 800, color: "#67E8F9" }}>
                   UGX {p.price.toLocaleString()}
                 </button>
               </div>
@@ -84,14 +84,14 @@ export function ArtistPage() {
         {artistTab === "monetize" && (
           <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill,minmax(160px,1fr))" }}>
             {ARTIST_PLANS.map((p) => (
-              <div key={p.id} className="glass-card" style={{ padding: 18, border: p.id === "pro" ? "1.5px solid rgba(155,109,255,0.5)" : undefined, position: "relative" }}>
-                {p.id === "pro" && <div style={{ position: "absolute", top: -9, right: 14, background: "linear-gradient(135deg,#9B6DFF,#FF6BA8)", borderRadius: 100, fontSize: 8.5, fontWeight: 900, color: "#fff", padding: "3px 9px", letterSpacing: "0.05em" }}>MOST POPULAR</div>}
-                <div style={{ fontSize: 15, fontWeight: 900, color: "#F0F0FF", marginBottom: 2 }}>{p.name}</div>
-                <div style={{ fontSize: 19, fontWeight: 900, color: "#C4A1FF", marginBottom: 10 }}>UGX {p.price.toLocaleString()}<span style={{ fontSize: 10, color: "var(--t3)", fontWeight: 600 }}>/mo</span></div>
+              <div key={p.id} className="glass-card" style={{ padding: 18, border: p.id === "pro" ? "1.5px solid rgba(56, 189, 248,0.5)" : undefined, position: "relative" }}>
+                {p.id === "pro" && <div style={{ position: "absolute", top: -9, right: 14, background: "linear-gradient(135deg,#38BDF8,#2DD4BF)", borderRadius: 100, fontSize: 8.5, fontWeight: 900, color: "#fff", padding: "3px 9px", letterSpacing: "0.05em" }}>MOST POPULAR</div>}
+                <div style={{ fontSize: 15, fontWeight: 900, color: "#EDF4FF", marginBottom: 2 }}>{p.name}</div>
+                <div style={{ fontSize: 19, fontWeight: 900, color: "#67E8F9", marginBottom: 10 }}>UGX {p.price.toLocaleString()}<span style={{ fontSize: 10, color: "var(--t3)", fontWeight: 600 }}>/mo</span></div>
                 {p.features.map((f) => (
                   <div key={f} style={{ fontSize: 11, color: "var(--t2)", fontWeight: 600, marginBottom: 5 }}>✓ {f}</div>
                 ))}
-                <button onClick={() => openPayment(`${p.name} Artist Plan`, p.price, p.id)} className="pressable" style={{ width: "100%", marginTop: 8, background: "linear-gradient(135deg,#9B6DFF,#FF6BA8)", borderRadius: 11, padding: "10px 0", fontSize: 12, fontWeight: 900, color: "#fff", border: "none" }}>
+                <button onClick={() => openPayment(`${p.name} Artist Plan`, p.price, p.id)} className="pressable" style={{ width: "100%", marginTop: 8, background: "linear-gradient(135deg,#38BDF8,#2DD4BF)", borderRadius: 11, padding: "10px 0", fontSize: 12, fontWeight: 900, color: "#fff", border: "none" }}>
                   Choose {p.name}
                 </button>
               </div>
@@ -115,8 +115,8 @@ function Dashboard({ artist, topSongs, playSong, openUpload }: any) {
     <>
       <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill,minmax(150px,1fr))", marginBottom: 14 }}>
         {[
-          { label: "Total Plays", value: `${Math.round(totalPlays)}K`, color: "#9B6DFF" },
-          { label: "Fans", value: artist.followers, color: "#FF6BA8" },
+          { label: "Total Plays", value: `${Math.round(totalPlays)}K`, color: "#38BDF8" },
+          { label: "Fans", value: artist.followers, color: "#2DD4BF" },
           { label: "Songs Live", value: String(artist.songs), color: "#22D3A5" },
           { label: "This Month", value: "UGX 0", color: "#F59E0B" },
         ].map((c) => (
@@ -137,7 +137,7 @@ function Dashboard({ artist, topSongs, playSong, openUpload }: any) {
             <span style={{ width: 18, textAlign: "center", fontSize: 12, fontWeight: 800, color: "var(--t3)" }}>{i + 1}</span>
             <CoverArt seed={s.seed} color={s.color} size={40} radius={10} imageUrl={s.coverUrl} />
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 12.5, fontWeight: 800, color: "#F0F0FF", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.title}</div>
+              <div style={{ fontSize: 12.5, fontWeight: 800, color: "#EDF4FF", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.title}</div>
               <div style={{ fontSize: 10, color: "var(--t3)", marginTop: 2 }}>▶ {s.plays} plays</div>
             </div>
           </div>
@@ -152,7 +152,7 @@ function Analytics({ artist }: { artist: any }) {
   const max = Math.max(...songs.map((s) => parseInt(s.plays.replace(/\D/g, ""))), 1);
   return (
     <div className="glass-card" style={{ padding: 18 }}>
-      <div style={{ fontSize: 14, fontWeight: 900, color: "#F0F0FF", marginBottom: 14 }}>Plays by track</div>
+      <div style={{ fontSize: 14, fontWeight: 900, color: "#EDF4FF", marginBottom: 14 }}>Plays by track</div>
       {songs.map((s) => {
         const v = parseInt(s.plays.replace(/\D/g, ""));
         return (
@@ -162,7 +162,7 @@ function Analytics({ artist }: { artist: any }) {
               <span style={{ fontSize: 11, fontWeight: 800, color: s.color }}>{s.plays}</span>
             </div>
             <div style={{ height: 6, background: "rgba(255,255,255,0.06)", borderRadius: 100, overflow: "hidden" }}>
-              <div style={{ height: "100%", width: `${(v / max) * 100}%`, background: `linear-gradient(90deg,${s.color},#FF6BA8)`, borderRadius: 100 }} />
+              <div style={{ height: "100%", width: `${(v / max) * 100}%`, background: `linear-gradient(90deg,${s.color},#2DD4BF)`, borderRadius: 100 }} />
             </div>
           </div>
         );
@@ -176,9 +176,9 @@ function EmptyCard({ icon, title, body, cta, onCta }: { icon: string; title: str
   return (
     <div className="glass-card" style={{ padding: "34px 22px", textAlign: "center" }}>
       <div style={{ fontSize: 38, marginBottom: 12 }}>{icon}</div>
-      <div style={{ fontSize: 15.5, fontWeight: 900, color: "#F0F0FF", marginBottom: 6 }}>{title}</div>
+      <div style={{ fontSize: 15.5, fontWeight: 900, color: "#EDF4FF", marginBottom: 6 }}>{title}</div>
       <div style={{ fontSize: 12, color: "var(--t2)", lineHeight: 1.6, marginBottom: 18, maxWidth: 320, margin: "0 auto 18px" }}>{body}</div>
-      <button onClick={onCta} className="pressable" style={{ background: "linear-gradient(135deg,#9B6DFF,#FF6BA8)", borderRadius: 100, padding: "11px 24px", fontSize: 12.5, fontWeight: 900, color: "#fff", border: "none", boxShadow: "0 6px 20px rgba(155,109,255,0.35)" }}>{cta}</button>
+      <button onClick={onCta} className="pressable" style={{ background: "linear-gradient(135deg,#38BDF8,#2DD4BF)", borderRadius: 100, padding: "11px 24px", fontSize: 12.5, fontWeight: 900, color: "#fff", border: "none", boxShadow: "0 6px 20px rgba(56, 189, 248,0.35)" }}>{cta}</button>
     </div>
   );
 }

@@ -18,21 +18,21 @@ export function LibraryPage() {
       <header className="glass-dk sticky top-0 z-40" style={{ borderRadius: 0 }}>
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <div style={{ width: 38, height: 38, borderRadius: 13, background: "linear-gradient(135deg,#F472B6,#D946EF 55%,#8B5CF6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 19, flexShrink: 0 }}>🎧</div>
+            <div style={{ width: 38, height: 38, borderRadius: 13, background: "linear-gradient(135deg,#60A5FA,#3B82F6 55%,#06B6D4)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 19, flexShrink: 0 }}>🎧</div>
             <div>
-              <div style={{ fontFamily: "'Sora',sans-serif", fontSize: 15.5, fontWeight: 700, color: "#F4F1FF" }}>My Library</div>
-              <div style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(244,114,182,0.8)" }}>Your Music, Your Way</div>
+              <div style={{ fontFamily: "'Sora',sans-serif", fontSize: 15.5, fontWeight: 700, color: "#EAF2FF" }}>My Library</div>
+              <div style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(96, 165, 250,0.8)" }}>Your Music, Your Way</div>
             </div>
           </div>
-          <button onClick={() => setPage("downloads")} className="pressable" style={{ fontSize: 11, fontWeight: 800, padding: "7px 12px", borderRadius: 100, background: "rgba(155,109,255,0.14)", border: "1px solid rgba(155,109,255,0.35)", color: "#C4A1FF" }}>⬇ {dlCount} offline</button>
+          <button onClick={() => setPage("downloads")} className="pressable" style={{ fontSize: 11, fontWeight: 800, padding: "7px 12px", borderRadius: 100, background: "rgba(56, 189, 248,0.14)", border: "1px solid rgba(56, 189, 248,0.35)", color: "#67E8F9" }}>⬇ {dlCount} offline</button>
         </div>
       </header>
 
       {/* Stats strip */}
       <div className="px-4 grid grid-cols-3 gap-2" style={{ paddingTop: 14 }}>
         {[
-          { n: favorites.length, l: "Favorites", c: "#FF6BA8" },
-          { n: recentSongs.length, l: "Recently played", c: "#9B6DFF" },
+          { n: favorites.length, l: "Favorites", c: "#2DD4BF" },
+          { n: recentSongs.length, l: "Recently played", c: "#38BDF8" },
           { n: dlCount, l: "Saved offline", c: "#22D3A5" },
         ].map((s) => (
           <div key={s.l} className="glow-card" style={{ padding: "12px 8px", textAlign: "center" }}>
@@ -68,11 +68,11 @@ export function LibraryPage() {
                   <CoverArt seed={s.title} color={s.color} size={46} radius={12} />
                 )}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: active ? "#C4A1FF" : "#F0F0FF", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.title}</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: active ? "#67E8F9" : "#EDF4FF", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.title}</div>
                   <div style={{ fontSize: 11, color: "var(--t3)", marginTop: 2 }}>{s.artist} · {s.genre}</div>
                 </div>
                 <span style={{ fontSize: 10.5, color: "var(--t3)" }}>{fmtTime(toSec(s.duration))}</span>
-                <button className="pressable" onClick={(e) => { e.stopPropagation(); toggleFavorite(s.id); }} style={{ fontSize: 15, color: "#FF6BA8", padding: 4 }}>♥</button>
+                <button className="pressable" onClick={(e) => { e.stopPropagation(); toggleFavorite(s.id); }} style={{ fontSize: 15, color: "#2DD4BF", padding: 4 }}>♥</button>
               </div>
             );
           })
@@ -91,7 +91,7 @@ export function LibraryPage() {
                 ) : (
                   <CoverArt seed={s.title} color={s.color} size={104} radius={12} />
                 )}
-                <div style={{ fontSize: 11.5, fontWeight: 800, color: "#F0F0FF", marginTop: 7, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.title}</div>
+                <div style={{ fontSize: 11.5, fontWeight: 800, color: "#EDF4FF", marginTop: 7, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.title}</div>
                 <div style={{ fontSize: 10, color: "var(--t3)" }}>{s.artist}</div>
               </div>
             ))}
@@ -107,7 +107,7 @@ export function LibraryPage() {
             <div key={pl.id} className="card-hover flex-shrink-0" style={{ width: 150, position: "relative", marginBottom: 14 }}>
               <div style={{ width: 150, height: 172, borderRadius: 20, overflow: "hidden", position: "relative", boxShadow: `0 10px 28px ${pl.color}35` }}>
                 <CoverArt seed={pl.seed} color={pl.color} size={150} radius={0} />
-                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, transparent 40%, rgba(6,4,12,0.55) 75%, rgba(6,4,12,0.92) 100%)" }} />
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, transparent 40%, rgba(4, 12, 26,0.55) 75%, rgba(4, 12, 26,0.92) 100%)" }} />
                 <div style={{ position: "absolute", left: 12, bottom: 12, right: 12 }}>
                   <div style={{ fontFamily: "'Sora',sans-serif", fontSize: 13.5, fontWeight: 700, color: "#fff", marginBottom: 3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{pl.name}</div>
                   <div style={{ fontSize: 10.5, color: "rgba(255,255,255,0.65)", fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}>♫ {pl.count} tracks</div>

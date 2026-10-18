@@ -20,7 +20,7 @@ export function TrendingPage() {
           <div className="page-title">🔥 Charts</div>
           <div style={{ display: "inline-flex", background: "var(--surf)", border: "1px solid var(--bd)", borderRadius: 100, padding: 3 }}>
             {(["today", "week", "month"] as const).map((r) => (
-              <button key={r} onClick={() => setRange(r)} className="pressable" style={{ padding: "5px 13px", borderRadius: 100, fontSize: 10.5, fontWeight: 800, background: range === r ? "linear-gradient(135deg,#9B6DFF,#FF6BA8)" : "transparent", color: range === r ? "#fff" : "var(--t2)", border: "none", textTransform: "capitalize" }}>
+              <button key={r} onClick={() => setRange(r)} className="pressable" style={{ padding: "5px 13px", borderRadius: 100, fontSize: 10.5, fontWeight: 800, background: range === r ? "linear-gradient(135deg,#38BDF8,#2DD4BF)" : "transparent", color: range === r ? "#fff" : "var(--t2)", border: "none", textTransform: "capitalize" }}>
                 {r === "today" ? "Today" : r === "week" ? "This Week" : "This Month"}
               </button>
             ))}
@@ -51,14 +51,14 @@ export function TrendingPage() {
             return (
               <div key={s.id} className="track-row" onClick={() => playSong(s as any)} style={{ borderBottom: i < ranked.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
                 <div style={{ width: 34, display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
-                  <span style={{ fontSize: 14, fontWeight: 900, color: active ? "#9B6DFF" : i < 3 ? s.color : "var(--t3)", fontStyle: active ? "italic" : "normal" }}>{i + 1}</span>
+                  <span style={{ fontSize: 14, fontWeight: 900, color: active ? "#38BDF8" : i < 3 ? s.color : "var(--t3)", fontStyle: active ? "italic" : "normal" }}>{i + 1}</span>
                   <span style={{ fontSize: 8, fontWeight: 800, color: move === "up" ? "#22D3A5" : move === "down" ? "#FB7185" : "var(--t3)" }}>
                     {move === "up" ? "▲" : move === "down" ? "▼" : "—"}
                   </span>
                 </div>
                 <CoverArt seed={s.seed} color={s.color} size={46} radius={12} imageUrl={s.coverUrl} />
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: active ? "#C4A1FF" : "#F0F0FF", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.title}</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: active ? "#67E8F9" : "#EDF4FF", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.title}</div>
                   <div style={{ fontSize: 11, color: "var(--t2)", marginTop: 2 }}>{s.artist} · {s.genre}</div>
                 </div>
                 <div style={{ textAlign: "right", flexShrink: 0 }}>

@@ -22,10 +22,10 @@ export function UploadModal() {
 
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 350, background: "rgba(0,0,0,0.7)", backdropFilter: "blur(6px)", display: "flex", alignItems: "flex-end", justifyContent: "center" }} onClick={closeUpload}>
-      <div className="sheet" onClick={(e) => e.stopPropagation()} style={{ width: "100%", maxWidth: 480, background: "linear-gradient(180deg,#141028 0%,#0B0918 100%)", borderRadius: "28px 28px 0 0", padding: "24px 20px 32px", border: "1px solid rgba(155,109,255,0.2)", animation: "sheet-up 0.3s cubic-bezier(0.2,0.8,0.2,1)" }}>
+      <div className="sheet" onClick={(e) => e.stopPropagation()} style={{ width: "100%", maxWidth: 480, background: "linear-gradient(180deg,#0C1730 0%,#070E1C 100%)", borderRadius: "28px 28px 0 0", padding: "24px 20px 32px", border: "1px solid rgba(56, 189, 248,0.2)", animation: "sheet-up 0.3s cubic-bezier(0.2,0.8,0.2,1)" }}>
         <div style={{ width: 40, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.12)", margin: "0 auto 18px" }} />
 
-        <div style={{ fontSize: 20, fontWeight: 900, color: "#F0F0FF", marginBottom: 4 }}>
+        <div style={{ fontSize: 20, fontWeight: 900, color: "#EDF4FF", marginBottom: 4 }}>
           {type === "song" ? "🎵 Upload a Song" : "🎬 Upload a Video"}
         </div>
         <div style={{ fontSize: 12, color: "var(--t2)", marginBottom: 20, lineHeight: 1.5 }}>
@@ -49,7 +49,7 @@ export function UploadModal() {
           {file ? `✓ ${file} attached` : "＋ Choose file from device"}
         </button>
 
-        <button onClick={submit} className="pressable" style={{ width: "100%", marginTop: 20, background: "linear-gradient(135deg,#9B6DFF,#FF6BA8)", borderRadius: 14, padding: "14px 0", fontSize: 14, fontWeight: 900, color: "#fff", boxShadow: "0 8px 28px rgba(155,109,255,0.4)" }}>
+        <button onClick={submit} className="pressable" style={{ width: "100%", marginTop: 20, background: "linear-gradient(135deg,#38BDF8,#2DD4BF)", borderRadius: 14, padding: "14px 0", fontSize: 14, fontWeight: 900, color: "#fff", boxShadow: "0 8px 28px rgba(56, 189, 248,0.4)" }}>
           Submit for Review
         </button>
       </div>

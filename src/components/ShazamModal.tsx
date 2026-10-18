@@ -168,9 +168,9 @@ export function ShazamModal({ onClose }: Props) {
       <div style={{ marginBottom: 8, textAlign: "center" }}>
         <div style={{
           fontSize: 13, fontWeight: 700, letterSpacing: "0.14em",
-          color: "#9B6DFF", textTransform: "uppercase", marginBottom: 4,
+          color: "#38BDF8", textTransform: "uppercase", marginBottom: 4,
         }}>Tooro Shazam</div>
-        <div style={{ fontSize: 28, fontWeight: 900, color: "#F0F0FF" }}>
+        <div style={{ fontSize: 28, fontWeight: 900, color: "#EDF4FF" }}>
           {state === "idle" && "Identify Any Song"}
           {state === "listening" && `Listening${".".repeat(dots)}`}
           {state === "processing" && "Recognizing..."}
@@ -207,24 +207,24 @@ export function ShazamModal({ onClose }: Props) {
             style={{
               width: 140, height: 140, borderRadius: "50%",
               background: state === "listening"
-                ? "linear-gradient(135deg,#9B6DFF,#FF6BA8)"
+                ? "linear-gradient(135deg,#38BDF8,#2DD4BF)"
                 : state === "processing"
                 ? "linear-gradient(135deg,#1E1E3F,#2D1B69)"
-                : "linear-gradient(135deg,#9B6DFF,#5B21B6)",
+                : "linear-gradient(135deg,#38BDF8,#164E63)",
               border: "none",
               display: "flex", flexDirection: "column",
               alignItems: "center", justifyContent: "center", gap: 4,
               cursor: state === "idle" ? "pointer" : "default",
               boxShadow: state === "listening"
-                ? "0 0 60px rgba(155,109,255,0.6), 0 0 120px rgba(255,107,168,0.3)"
-                : "0 12px 40px rgba(155,109,255,0.4)",
+                ? "0 0 60px rgba(56, 189, 248,0.6), 0 0 120px rgba(255,107,168,0.3)"
+                : "0 12px 40px rgba(56, 189, 248,0.4)",
               transition: "all 0.3s ease",
               position: "relative", zIndex: 2,
               transform: state === "listening" ? "scale(1.05)" : "scale(1)",
             }}
           >
             {state === "processing" ? (
-              <div style={{ width: 36, height: 36, border: "3px solid rgba(155,109,255,0.2)", borderTopColor: "#9B6DFF", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+              <div style={{ width: 36, height: 36, border: "3px solid rgba(56, 189, 248,0.2)", borderTopColor: "#38BDF8", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
             ) : (
               <>
                 {/* Shazam-style S icon */}
@@ -247,7 +247,7 @@ export function ShazamModal({ onClose }: Props) {
         <div style={{
           width: "100%", maxWidth: 360,
           background: "rgba(255,255,255,0.04)",
-          border: "1px solid rgba(155,109,255,0.2)",
+          border: "1px solid rgba(56, 189, 248,0.2)",
           borderRadius: 24,
           padding: 20,
           marginTop: 16,
@@ -257,24 +257,24 @@ export function ShazamModal({ onClose }: Props) {
           <div style={{ position: "relative" }}>
             {result.cover ? (
               <img src={result.cover} alt={result.title}
-                style={{ width: 140, height: 140, borderRadius: 20, objectFit: "cover", boxShadow: "0 16px 48px rgba(155,109,255,0.35)" }} />
+                style={{ width: 140, height: 140, borderRadius: 20, objectFit: "cover", boxShadow: "0 16px 48px rgba(56, 189, 248,0.35)" }} />
             ) : (
-              <div style={{ width: 140, height: 140, borderRadius: 20, background: "linear-gradient(135deg,#9B6DFF,#FF6BA8)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 48 }}>🎵</div>
+              <div style={{ width: 140, height: 140, borderRadius: 20, background: "linear-gradient(135deg,#38BDF8,#2DD4BF)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 48 }}>🎵</div>
             )}
             {/* Verified badge */}
             <div style={{
               position: "absolute", bottom: -8, right: -8,
               width: 32, height: 32, borderRadius: "50%",
-              background: "linear-gradient(135deg,#9B6DFF,#5B21B6)",
+              background: "linear-gradient(135deg,#38BDF8,#164E63)",
               display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 16, boxShadow: "0 4px 12px rgba(155,109,255,0.5)",
+              fontSize: 16, boxShadow: "0 4px 12px rgba(56, 189, 248,0.5)",
             }}>✓</div>
           </div>
 
           {/* Song info */}
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 22, fontWeight: 900, color: "#F0F0FF", letterSpacing: "-0.02em" }}>{result.title}</div>
-            <div style={{ fontSize: 15, color: "#9B6DFF", fontWeight: 700, marginTop: 4 }}>{result.artist}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, color: "#EDF4FF", letterSpacing: "-0.02em" }}>{result.title}</div>
+            <div style={{ fontSize: 15, color: "#38BDF8", fontWeight: 700, marginTop: 4 }}>{result.artist}</div>
             <div style={{ fontSize: 12, color: "#555", marginTop: 2 }}>{result.album} · {result.release_date?.slice(0, 4)}</div>
             {result.label && <div style={{ fontSize: 11, color: "#444", marginTop: 2 }}>{result.label}</div>}
           </div>
@@ -286,7 +286,7 @@ export function ShazamModal({ onClose }: Props) {
               <audio
                 controls
                 src={result.preview}
-                style={{ width: "100%", borderRadius: 12, height: 36, accentColor: "#9B6DFF" }}
+                style={{ width: "100%", borderRadius: 12, height: 36, accentColor: "#38BDF8" }}
               />
             </div>
           )}
@@ -300,10 +300,10 @@ export function ShazamModal({ onClose }: Props) {
                 rel="noopener noreferrer"
                 style={{
                   flex: 1, padding: "12px 8px", borderRadius: 14, textAlign: "center",
-                  background: "linear-gradient(135deg,#9B6DFF,#5B21B6)",
+                  background: "linear-gradient(135deg,#38BDF8,#164E63)",
                   color: "#fff", fontSize: 13, fontWeight: 800,
                   textDecoration: "none",
-                  boxShadow: "0 4px 16px rgba(155,109,255,0.35)",
+                  boxShadow: "0 4px 16px rgba(56, 189, 248,0.35)",
                 }}
               >🔗 Open Link</a>
             )}
@@ -328,9 +328,9 @@ export function ShazamModal({ onClose }: Props) {
             onClick={reset}
             style={{
               padding: "14px 40px", borderRadius: 16,
-              background: "linear-gradient(135deg,#9B6DFF,#5B21B6)",
+              background: "linear-gradient(135deg,#38BDF8,#164E63)",
               border: "none", color: "#fff", fontSize: 15, fontWeight: 800,
-              boxShadow: "0 8px 24px rgba(155,109,255,0.4)",
+              boxShadow: "0 8px 24px rgba(56, 189, 248,0.4)",
             }}
           >Try Again</button>
         </div>
@@ -361,7 +361,7 @@ export function ShazamModal({ onClose }: Props) {
         .shazam-ring {
           position: absolute;
           border-radius: 50%;
-          border: 2px solid rgba(155, 109, 255, 0.25);
+          border: 2px solid rgba(56, 189, 248, 0.25);
           animation: shazam-pulse 1.8s ease-out infinite;
         }
         @keyframes shazam-pulse {
