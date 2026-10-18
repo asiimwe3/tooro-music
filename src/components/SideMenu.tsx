@@ -50,7 +50,7 @@ export function SideMenu({ persistent, onIdentify }: Props) {
       }}>
         <div style={{ padding: "28px 22px 22px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ width: 46, height: 46, borderRadius: 14, background: "conic-gradient(from 210deg, #06B6D4, #3B82F6, #60A5FA, #06B6D4)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, boxShadow: "0 6px 20px rgba(6, 182, 212,0.5), inset 0 1px 0 rgba(255,255,255,0.3)" }}>🎵</div>
+            <div style={{ width: 46, height: 46, borderRadius: 14, background: "conic-gradient(from 210deg, #06B6D4, #3B82F6, #6366F1, #818CF8, #06B6D4)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, boxShadow: "0 6px 20px rgba(6, 182, 212,0.5), inset 0 1px 0 rgba(255,255,255,0.3)" }}>🎵</div>
             <div>
               <div style={{ fontFamily:"'Sora',sans-serif", fontSize: 17, fontWeight: 700, color: "#EAF2FF" }}>Tooro Music</div>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#3B4C66" }}>Western Uganda</div>
@@ -59,7 +59,7 @@ export function SideMenu({ persistent, onIdentify }: Props) {
 
           {user ? (
             <div style={{ marginTop: 18, display: "flex", alignItems: "center", gap: 10, background: "var(--surf)", border: "1px solid var(--bd)", borderRadius: 14, padding: "10px 12px" }}>
-              <div style={{ width: 34, height: 34, borderRadius: "50%", background: "linear-gradient(135deg,#38BDF8,#164E63)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 900, color: "#fff" }}>
+              <div style={{ width: 34, height: 34, borderRadius: "50%", background: "linear-gradient(135deg,#38BDF8,#4F46E5)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 900, color: "#fff" }}>
                 {user.displayName?.charAt(0)?.toUpperCase() || "U"}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
@@ -69,7 +69,7 @@ export function SideMenu({ persistent, onIdentify }: Props) {
               <div style={{ fontSize: 9, fontWeight: 800, color: "#22D3A5", background: "rgba(34,211,165,0.12)", border: "1px solid rgba(34,211,165,0.3)", borderRadius: 100, padding: "3px 8px" }}>FREE</div>
             </div>
           ) : (
-            <button onClick={() => { setSideMenuOpen(false); setAuthModal("login"); }} className="pressable" style={{ marginTop: 18, width: "100%", background: "linear-gradient(135deg,#38BDF8,#2DD4BF)", borderRadius: 12, padding: "11px 0", fontSize: 13, fontWeight: 900, color: "#fff", boxShadow: "0 6px 20px rgba(56, 189, 248,0.35)" }}>
+            <button onClick={() => { setSideMenuOpen(false); setAuthModal("login"); }} className="pressable" style={{ marginTop: 18, width: "100%", background: "linear-gradient(135deg,#38BDF8,#3B82F6,#818CF8)", borderRadius: 12, padding: "11px 0", fontSize: 13, fontWeight: 900, color: "#fff", boxShadow: "0 6px 20px rgba(56, 189, 248,0.35)" }}>
               Sign In / Create Account
             </button>
           )}

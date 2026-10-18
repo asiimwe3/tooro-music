@@ -24,7 +24,7 @@ export function PremiumPage() {
         <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill,minmax(150px,1fr))" }}>
           {PREM_PLANS.map((p, i) => (
             <div key={p.id} className="glass-card" style={{ padding: 20, border: i === 0 ? "1.5px solid rgba(56, 189, 248,0.5)" : undefined, position: "relative" }}>
-              {i === 0 && <div style={{ position: "absolute", top: -9, right: 14, background: "linear-gradient(135deg,#38BDF8,#2DD4BF)", borderRadius: 100, fontSize: 8.5, fontWeight: 900, color: "#fff", padding: "3px 9px", letterSpacing: "0.05em" }}>BEST VALUE</div>}
+              {i === 0 && <div style={{ position: "absolute", top: -9, right: 14, background: "linear-gradient(135deg,#38BDF8,#3B82F6,#818CF8)", borderRadius: 100, fontSize: 8.5, fontWeight: 900, color: "#fff", padding: "3px 9px", letterSpacing: "0.05em" }}>BEST VALUE</div>}
               <div style={{ fontSize: 15, fontWeight: 900, color: "#EDF4FF", marginBottom: 2 }}>{p.name}</div>
               <div style={{ fontSize: 22, fontWeight: 900, color: "#67E8F9", marginBottom: 12 }}>
                 UGX {p.price.toLocaleString()}
@@ -33,7 +33,7 @@ export function PremiumPage() {
               {p.features.map((f) => (
                 <div key={f} style={{ fontSize: 11.5, color: "var(--t2)", fontWeight: 600, marginBottom: 6 }}>✓ {f}</div>
               ))}
-              <button onClick={() => openPayment(`Premium ${p.name}`, p.price, p.id)} className="pressable" style={{ width: "100%", marginTop: 10, background: "linear-gradient(135deg,#38BDF8,#2DD4BF)", borderRadius: 12, padding: "11px 0", fontSize: 12.5, fontWeight: 900, color: "#fff", border: "none", boxShadow: "0 6px 20px rgba(56, 189, 248,0.35)" }}>
+              <button onClick={() => openPayment(`Premium ${p.name}`, p.price, p.id)} className="pressable" style={{ width: "100%", marginTop: 10, background: "linear-gradient(135deg,#38BDF8,#3B82F6,#818CF8)", borderRadius: 12, padding: "11px 0", fontSize: 12.5, fontWeight: 900, color: "#fff", border: "none", boxShadow: "0 6px 20px rgba(56, 189, 248,0.35)" }}>
                 Get {p.name}
               </button>
             </div>

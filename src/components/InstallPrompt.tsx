@@ -70,7 +70,7 @@ export function InstallPrompt() {
         <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
           <button onClick={close} className="pressable" style={{ flex: 1, padding: "13px 0", borderRadius: 14, fontSize: 13, fontWeight: 800, background: "var(--surf)", border: "1px solid var(--bd)", color: "var(--t2)" }}>Not now</button>
           {!isIOS && (
-            <button onClick={install} className="pressable" style={{ flex: 1.6, padding: "13px 0", borderRadius: 14, fontSize: 13, fontWeight: 900, background: "linear-gradient(135deg,#38BDF8,#164E63)", color: "#fff", boxShadow: "0 6px 20px rgba(56,189,248,0.4)" }}>📲 Install App</button>
+            <button onClick={install} className="pressable" style={{ flex: 1.6, padding: "13px 0", borderRadius: 14, fontSize: 13, fontWeight: 900, background: "linear-gradient(135deg,#38BDF8,#4F46E5)", color: "#fff", boxShadow: "0 6px 20px rgba(56,189,248,0.4)" }}>📲 Install App</button>
           )}
         </div>
       </div>

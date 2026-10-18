@@ -34,7 +34,7 @@ export function BottomNav({ onShazam }: Props) {
               {/* Floating circle that lifts above the dock */}
               <div style={{
                 width: 58, height: 58, borderRadius: "50%",
-                background: "conic-gradient(from 210deg, #06B6D4, #3B82F6, #60A5FA, #06B6D4)",
+                background: "conic-gradient(from 210deg, #06B6D4, #3B82F6, #6366F1, #818CF8, #06B6D4)",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 boxShadow: "0 0 26px rgba(59, 130, 246,0.55), 0 10px 26px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.35)",
                 marginTop: -24, // lifts above the dock

@@ -27,7 +27,7 @@ export function SettingsPage() {
       {/* Account */}
       <div className="px-4" style={{ paddingTop: 14 }}>
         <div className="glow-card" style={{ padding: 16, display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ width: 46, height: 46, borderRadius: "50%", background: "linear-gradient(135deg,#38BDF8,#164E63)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 900, flexShrink: 0 }}>
+          <div style={{ width: 46, height: 46, borderRadius: "50%", background: "linear-gradient(135deg,#38BDF8,#4F46E5)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 900, flexShrink: 0 }}>
             {user?.displayName?.charAt(0)?.toUpperCase() || "👤"}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
@@ -51,7 +51,7 @@ export function SettingsPage() {
               <div style={{ fontSize: 12.5, fontWeight: 800, color: "var(--t2)" }}>Play full songs</div>
               <div style={{ fontSize: 10.5, color: "var(--t3)", marginTop: 2 }}>When a full-length version is available, the app switches from the 30s preview to the complete track.</div>
             </div>
-            <button onClick={() => { const v = !autoFull; setAutoFull(v); localStorage.setItem("tm_autofull", v ? "1" : "0"); showToast(v ? "Full songs on — plays complete tracks when available" : "Full songs off — previews only"); }} className="pressable" style={{ width: 46, height: 26, borderRadius: 100, background: autoFull ? "linear-gradient(135deg,#38BDF8,#164E63)" : "var(--surf)", border: "1px solid var(--bd)", position: "relative", flexShrink: 0 }}>
+            <button onClick={() => { const v = !autoFull; setAutoFull(v); localStorage.setItem("tm_autofull", v ? "1" : "0"); showToast(v ? "Full songs on — plays complete tracks when available" : "Full songs off — previews only"); }} className="pressable" style={{ width: 46, height: 26, borderRadius: 100, background: autoFull ? "linear-gradient(135deg,#38BDF8,#4F46E5)" : "var(--surf)", border: "1px solid var(--bd)", position: "relative", flexShrink: 0 }}>
               <span style={{ position: "absolute", top: 3, left: autoFull ? 23 : 3, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.18s ease" }} />
             </button>
           </div>
@@ -60,7 +60,7 @@ export function SettingsPage() {
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "var(--t2)" }}>Playback speed</div>
           <div className="flex gap-2" style={{ marginTop: 10 }}>
             {SPEEDS.map((s) => (
-              <button key={s} onClick={() => { setPlaybackSpeed(s); showToast(`Speed set to ${s}x`); }} className="pressable" style={{ flex: 1, padding: "9px 0", borderRadius: 11, fontSize: 12, fontWeight: 800, background: playbackSpeed === s ? "linear-gradient(135deg,#38BDF8,#164E63)" : "var(--surf)", border: playbackSpeed === s ? "none" : "1px solid var(--bd)", color: playbackSpeed === s ? "#fff" : "var(--t2)" }}>{s}x</button>
+              <button key={s} onClick={() => { setPlaybackSpeed(s); showToast(`Speed set to ${s}x`); }} className="pressable" style={{ flex: 1, padding: "9px 0", borderRadius: 11, fontSize: 12, fontWeight: 800, background: playbackSpeed === s ? "linear-gradient(135deg,#38BDF8,#4F46E5)" : "var(--surf)", border: playbackSpeed === s ? "none" : "1px solid var(--bd)", color: playbackSpeed === s ? "#fff" : "var(--t2)" }}>{s}x</button>
             ))}
           </div>
           <div style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "14px 0" }} />

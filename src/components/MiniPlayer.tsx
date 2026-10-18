@@ -291,7 +291,7 @@ export function MiniPlayer() {
           {/* Controls */}
           <div className="flex items-center justify-between px-8 mb-5">
             <button className="pressable" onClick={prevSong} style={{ width: 48, height: 48, borderRadius: 14, background: "var(--surf)", border: "1px solid var(--bd)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, color: "var(--t2)" }}>⏮</button>
-            <button className="pressable" onClick={togglePlay} style={{ width: 68, height: 68, borderRadius: "50%", background: "conic-gradient(from 210deg, #06B6D4, #3B82F6, #60A5FA, #06B6D4)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, boxShadow: "0 10px 34px rgba(6, 182, 212,0.55), inset 0 1px 0 rgba(255,255,255,0.3)" }}>{isPlaying ? "⏸" : "▶"}</button>
+            <button className="pressable" onClick={togglePlay} style={{ width: 68, height: 68, borderRadius: "50%", background: "conic-gradient(from 210deg, #06B6D4, #3B82F6, #6366F1, #818CF8, #06B6D4)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, boxShadow: "0 10px 34px rgba(6, 182, 212,0.55), inset 0 1px 0 rgba(255,255,255,0.3)" }}>{isPlaying ? "⏸" : "▶"}</button>
             <button className="pressable" onClick={nextSong} style={{ width: 48, height: 48, borderRadius: 14, background: "var(--surf)", border: "1px solid var(--bd)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, color: "var(--t2)" }}>⏭</button>
           </div>
 
@@ -301,7 +301,7 @@ export function MiniPlayer() {
               <div className="label mb-2">Playback Speed</div>
               <div className="flex gap-2">
                 {SPEEDS.map(s => (
-                  <button key={s} onClick={() => setPlaybackSpeed(s)} style={{ flex: 1, padding: "9px 4px", borderRadius: 11, fontSize: 12, fontWeight: 800, background: playbackSpeed === s ? "linear-gradient(135deg,#38BDF8,#164E63)" : "var(--surf)", border: playbackSpeed === s ? "none" : "1px solid var(--bd)", color: playbackSpeed === s ? "#fff" : "var(--t3)", boxShadow: playbackSpeed === s ? "0 4px 12px rgba(56, 189, 248,0.3)" : "none" }}>{s}x</button>
+                  <button key={s} onClick={() => setPlaybackSpeed(s)} style={{ flex: 1, padding: "9px 4px", borderRadius: 11, fontSize: 12, fontWeight: 800, background: playbackSpeed === s ? "linear-gradient(135deg,#38BDF8,#4F46E5)" : "var(--surf)", border: playbackSpeed === s ? "none" : "1px solid var(--bd)", color: playbackSpeed === s ? "#fff" : "var(--t3)", boxShadow: playbackSpeed === s ? "0 4px 12px rgba(56, 189, 248,0.3)" : "none" }}>{s}x</button>
                 ))}
               </div>
             </div>
@@ -360,7 +360,7 @@ export function MiniPlayer() {
             {showSpeed && (
               <div style={{ position: "absolute", bottom: 38, right: 0, background: "var(--card)", border: "1px solid var(--bd)", borderRadius: 16, padding: 8, display: "flex", flexDirection: "column", gap: 3, minWidth: 64, zIndex: 10, boxShadow: "0 8px 32px rgba(0,0,0,0.5)" }}>
                 {SPEEDS.map(s => (
-                  <button key={s} onClick={() => { setPlaybackSpeed(s); setShowSpeed(false); }} style={{ padding: "7px 10px", borderRadius: 9, fontSize: 12, fontWeight: 800, background: playbackSpeed === s ? "linear-gradient(135deg,#38BDF8,#164E63)" : "transparent", color: playbackSpeed === s ? "#fff" : "var(--t2)" }}>{s}x</button>
+                  <button key={s} onClick={() => { setPlaybackSpeed(s); setShowSpeed(false); }} style={{ padding: "7px 10px", borderRadius: 9, fontSize: 12, fontWeight: 800, background: playbackSpeed === s ? "linear-gradient(135deg,#38BDF8,#4F46E5)" : "transparent", color: playbackSpeed === s ? "#fff" : "var(--t2)" }}>{s}x</button>
                 ))}
               </div>
             )}
@@ -368,7 +368,7 @@ export function MiniPlayer() {
 
           {/* Controls */}
           <button className="pressable" onClick={prevSong} style={{ width: 34, height: 34, borderRadius: 10, background: "var(--surf)", border: "1px solid var(--bd)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, color: "var(--t2)" }}>⏮</button>
-          <button className="pressable" onClick={togglePlay} style={{ width: 40, height: 40, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, background: "linear-gradient(135deg,#38BDF8,#164E63)", boxShadow: "0 4px 16px rgba(56, 189, 248,0.4)" }}>{isPlaying ? "⏸" : "▶"}</button>
+          <button className="pressable" onClick={togglePlay} style={{ width: 40, height: 40, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, background: "linear-gradient(135deg,#38BDF8,#4F46E5)", boxShadow: "0 4px 16px rgba(56, 189, 248,0.4)" }}>{isPlaying ? "⏸" : "▶"}</button>
           <button className="pressable" onClick={nextSong} style={{ width: 34, height: 34, borderRadius: 10, background: "var(--surf)", border: "1px solid var(--bd)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, color: "var(--t2)" }}>⏭</button>
         </div>
       </div>

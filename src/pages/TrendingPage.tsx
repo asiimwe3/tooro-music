@@ -23,7 +23,7 @@ export function TrendingPage() {
           <div className="page-title">🔥 Charts</div>
           <div style={{ display: "inline-flex", background: "var(--surf)", border: "1px solid var(--bd)", borderRadius: 100, padding: 3 }}>
             {(["today", "week", "month"] as const).map((r) => (
-              <button key={r} onClick={() => setRange(r)} className="pressable" style={{ padding: "5px 13px", borderRadius: 100, fontSize: 10.5, fontWeight: 800, background: range === r ? "linear-gradient(135deg,#38BDF8,#2DD4BF)" : "transparent", color: range === r ? "#fff" : "var(--t2)", border: "none", textTransform: "capitalize" }}>
+              <button key={r} onClick={() => setRange(r)} className="pressable" style={{ padding: "5px 13px", borderRadius: 100, fontSize: 10.5, fontWeight: 800, background: range === r ? "linear-gradient(135deg,#38BDF8,#3B82F6,#818CF8)" : "transparent", color: range === r ? "#fff" : "var(--t2)", border: "none", textTransform: "capitalize" }}>
                 {r === "today" ? "Today" : r === "week" ? "This Week" : "This Month"}
               </button>
             ))}

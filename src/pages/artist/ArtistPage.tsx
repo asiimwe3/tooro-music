@@ -87,13 +87,13 @@ export function ArtistPage() {
           <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill,minmax(160px,1fr))" }}>
             {ARTIST_PLANS.map((p) => (
               <div key={p.id} className="glass-card" style={{ padding: 18, border: p.id === "pro" ? "1.5px solid rgba(56, 189, 248,0.5)" : undefined, position: "relative" }}>
-                {p.id === "pro" && <div style={{ position: "absolute", top: -9, right: 14, background: "linear-gradient(135deg,#38BDF8,#2DD4BF)", borderRadius: 100, fontSize: 8.5, fontWeight: 900, color: "#fff", padding: "3px 9px", letterSpacing: "0.05em" }}>MOST POPULAR</div>}
+                {p.id === "pro" && <div style={{ position: "absolute", top: -9, right: 14, background: "linear-gradient(135deg,#38BDF8,#3B82F6,#818CF8)", borderRadius: 100, fontSize: 8.5, fontWeight: 900, color: "#fff", padding: "3px 9px", letterSpacing: "0.05em" }}>MOST POPULAR</div>}
                 <div style={{ fontSize: 15, fontWeight: 900, color: "#EDF4FF", marginBottom: 2 }}>{p.name}</div>
                 <div style={{ fontSize: 19, fontWeight: 900, color: "#67E8F9", marginBottom: 10 }}>UGX {p.price.toLocaleString()}<span style={{ fontSize: 10, color: "var(--t3)", fontWeight: 600 }}>/mo</span></div>
                 {p.features.map((f) => (
                   <div key={f} style={{ fontSize: 11, color: "var(--t2)", fontWeight: 600, marginBottom: 5 }}>✓ {f}</div>
                 ))}
-                <button onClick={() => openPayment(`${p.name} Artist Plan`, p.price, p.id)} className="pressable" style={{ width: "100%", marginTop: 8, background: "linear-gradient(135deg,#38BDF8,#2DD4BF)", borderRadius: 11, padding: "10px 0", fontSize: 12, fontWeight: 900, color: "#fff", border: "none" }}>
+                <button onClick={() => openPayment(`${p.name} Artist Plan`, p.price, p.id)} className="pressable" style={{ width: "100%", marginTop: 8, background: "linear-gradient(135deg,#38BDF8,#3B82F6,#818CF8)", borderRadius: 11, padding: "10px 0", fontSize: 12, fontWeight: 900, color: "#fff", border: "none" }}>
                   Choose {p.name}
                 </button>
               </div>
@@ -217,7 +217,7 @@ function EmptyCard({ icon, title, body, cta, onCta }: { icon: string; title: str
       <div style={{ fontSize: 38, marginBottom: 12 }}>{icon}</div>
       <div style={{ fontSize: 15.5, fontWeight: 900, color: "#EDF4FF", marginBottom: 6 }}>{title}</div>
       <div style={{ fontSize: 12, color: "var(--t2)", lineHeight: 1.6, marginBottom: 18, maxWidth: 320, margin: "0 auto 18px" }}>{body}</div>
-      <button onClick={onCta} className="pressable" style={{ background: "linear-gradient(135deg,#38BDF8,#2DD4BF)", borderRadius: 100, padding: "11px 24px", fontSize: 12.5, fontWeight: 900, color: "#fff", border: "none", boxShadow: "0 6px 20px rgba(56, 189, 248,0.35)" }}>{cta}</button>
+      <button onClick={onCta} className="pressable" style={{ background: "linear-gradient(135deg,#38BDF8,#3B82F6,#818CF8)", borderRadius: 100, padding: "11px 24px", fontSize: 12.5, fontWeight: 900, color: "#fff", border: "none", boxShadow: "0 6px 20px rgba(56, 189, 248,0.35)" }}>{cta}</button>
     </div>
   );
 }

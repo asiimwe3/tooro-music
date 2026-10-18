@@ -48,7 +48,7 @@ export function DiscoverPage() {
       <div className="px-4" style={{ paddingTop: 8 }}>
         <div style={{ display: "inline-flex", background: "var(--surf)", border: "1px solid var(--bd)", borderRadius: 100, padding: 3 }}>
           {(["songs", "artists"] as const).map((t) => (
-            <button key={t} onClick={() => setTab(t)} className="pressable" style={{ padding: "7px 18px", borderRadius: 100, fontSize: 12, fontWeight: 800, background: tab === t ? "linear-gradient(135deg,#38BDF8,#2DD4BF)" : "transparent", color: tab === t ? "#fff" : "var(--t2)", border: "none" }}>
+            <button key={t} onClick={() => setTab(t)} className="pressable" style={{ padding: "7px 18px", borderRadius: 100, fontSize: 12, fontWeight: 800, background: tab === t ? "linear-gradient(135deg,#38BDF8,#3B82F6,#818CF8)" : "transparent", color: tab === t ? "#fff" : "var(--t2)", border: "none" }}>
               {t === "songs" ? "Songs" : "Artists"}
             </button>
           ))}
@@ -112,7 +112,7 @@ function EmptyState({ text, actionLabel, action }: { text: string; actionLabel: 
     <div style={{ textAlign: "center", padding: "60px 20px" }}>
       <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
       <div style={{ fontSize: 14, fontWeight: 700, color: "var(--t2)", marginBottom: 16 }}>{text}</div>
-      <button onClick={action} className="pressable" style={{ background: "linear-gradient(135deg,#38BDF8,#2DD4BF)", borderRadius: 100, padding: "10px 22px", fontSize: 12.5, fontWeight: 900, color: "#fff", border: "none" }}>{actionLabel}</button>
+      <button onClick={action} className="pressable" style={{ background: "linear-gradient(135deg,#38BDF8,#3B82F6,#818CF8)", borderRadius: 100, padding: "10px 22px", fontSize: 12.5, fontWeight: 900, color: "#fff", border: "none" }}>{actionLabel}</button>
     </div>
   );
 }

@@ -4,17 +4,17 @@
    ════════════════════════════════════════════════════════════════ */
 :root {
   --bg: #040912;
-  --surf: rgba(255, 255, 255, 0.05);
-  --bd: rgba(255, 255, 255, 0.09);
-  --t1: #EAF2FF;
-  --t2: rgba(219, 234, 254, 0.62);
-  --t3: rgba(219, 234, 254, 0.36);
-  --pu: #22D3EE;
+  --surf: rgba(255, 255, 255, 0.065);
+  --bd: rgba(255, 255, 255, 0.115);
+  --t1: #EDF4FF;
+  --t2: rgba(219, 234, 254, 0.74);
+  --t3: rgba(219, 234, 254, 0.45);
+  --pu: #38BDF8;
   --pu2: #06B6D4;
-  --pk: #60A5FA;
+  --pk: #818CF8;
   --pr: #3B82F6;
-  --gold: #FBBF24;
-  --grad: linear-gradient(115deg, #06B6D4 0%, #3B82F6 52%, #60A5FA 100%);
+  --gold: #FFC53D;
+  --grad: linear-gradient(115deg, #06B6D4 0%, #3B82F6 46%, #6366F1 100%);
   --font-d: "Sora", "Inter", -apple-system, sans-serif;
   --font-b: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
@@ -45,10 +45,11 @@ body::before {
   z-index: -2;
   pointer-events: none;
   background:
-    radial-gradient(38% 42% at 12% 8%,  rgba(14, 116, 144, 0.22), transparent 100%),
-    radial-gradient(34% 40% at 88% 18%, rgba(59, 130, 246, 0.13), transparent 100%),
-    radial-gradient(40% 44% at 70% 88%, rgba(96, 165, 250, 0.10), transparent 100%),
-    radial-gradient(30% 38% at 6% 82%,  rgba(59, 7, 100, 0.35), transparent 100%);
+    radial-gradient(38% 42% at 12% 8%,  rgba(14, 116, 144, 0.26), transparent 100%),
+    radial-gradient(34% 40% at 88% 18%, rgba(59, 130, 246, 0.17), transparent 100%),
+    radial-gradient(40% 44% at 70% 88%, rgba(99, 102, 241, 0.15), transparent 100%),
+    radial-gradient(30% 38% at 6% 82%,  rgba(8, 145, 178, 0.20), transparent 100%),
+    radial-gradient(24% 30% at 50% 50%, rgba(109, 40, 217, 0.10), transparent 100%);
   filter: blur(30px);
   animation: aurora 26s ease-in-out infinite alternate;
 }
@@ -101,8 +102,8 @@ input:focus { border-color: rgba(103, 232, 249, 0.6) !important; box-shadow: 0 0
 /* premium glass card: gradient hairline + inner light */
 .glass-card {
   position: relative;
-  background: linear-gradient(160deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.022) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.075);
+  background: linear-gradient(160deg, rgba(255,255,255,0.075) 0%, rgba(255,255,255,0.03) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.095);
   border-radius: 22px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -113,10 +114,10 @@ input:focus { border-color: rgba(103, 232, 249, 0.6) !important; box-shadow: 0 0
 .glow-card {
   border: 1px solid transparent;
   background:
-    linear-gradient(160deg, rgba(20,14,38,0.92), rgba(6, 16, 32,0.95)) padding-box,
-    linear-gradient(135deg, rgba(6, 182, 212,0.6), rgba(59, 130, 246,0.35), rgba(96, 165, 250,0.5)) border-box;
+    linear-gradient(160deg, rgba(8, 18, 36,0.94), rgba(4, 12, 26,0.96)) padding-box,
+    linear-gradient(135deg, rgba(6, 182, 212,0.65), rgba(59, 130, 246,0.45), rgba(99, 102, 241,0.55)) border-box;
   border-radius: 22px;
-  box-shadow: 0 14px 44px rgba(14, 116, 144, 0.22), inset 0 1px 0 rgba(255,255,255,0.08);
+  box-shadow: 0 14px 44px rgba(14, 116, 144, 0.26), inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 /* ── Typography ─────────────────────────────────────────────── */
@@ -127,7 +128,7 @@ input:focus { border-color: rgba(103, 232, 249, 0.6) !important; box-shadow: 0 0
 }
 
 .grad-text {
-  background: linear-gradient(100deg, #22D3EE 0%, #7DD3FC 40%, #BAE6FD 70%, #22D3EE 100%);
+  background: linear-gradient(100deg, #22D3EE 0%, #7DD3FC 34%, #A5B4FC 62%, #818CF8 78%, #22D3EE 100%);
   background-size: 220% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -178,8 +179,8 @@ input:focus { border-color: rgba(103, 232, 249, 0.6) !important; box-shadow: 0 0
   width: 36px; height: 36px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-size: 12px; color: #fff;
-  background: linear-gradient(135deg, rgba(6, 182, 212,0.95), rgba(59, 130, 246,0.9));
-  box-shadow: 0 6px 18px rgba(6, 182, 212, 0.5), inset 0 1px 0 rgba(255,255,255,0.25);
+  background: linear-gradient(135deg, rgba(6, 182, 212,0.95), rgba(59, 130, 246,0.9), rgba(99, 102, 241,0.85));
+  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.55), 0 2px 10px rgba(99, 102, 241, 0.35), inset 0 1px 0 rgba(255,255,255,0.25);
   backdrop-filter: blur(10px);
 }
 

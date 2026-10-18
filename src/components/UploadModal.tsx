@@ -158,7 +158,7 @@ export function UploadModal() {
           </div>
         )}
 
-        <button onClick={submit} disabled={busy} className="pressable" style={{ width: "100%", marginTop: 20, background: "linear-gradient(135deg,#38BDF8,#2DD4BF)", borderRadius: 14, padding: "14px 0", fontSize: 14, fontWeight: 900, color: "#fff", boxShadow: "0 8px 28px rgba(56,189,248,0.4)", opacity: busy ? 0.6 : 1 }}>
+        <button onClick={submit} disabled={busy} className="pressable" style={{ width: "100%", marginTop: 20, background: "linear-gradient(135deg,#38BDF8,#3B82F6,#818CF8)", borderRadius: 14, padding: "14px 0", fontSize: 14, fontWeight: 900, color: "#fff", boxShadow: "0 8px 28px rgba(56,189,248,0.4)", opacity: busy ? 0.6 : 1 }}>
           {busy ? `Compressing… ${progress}%` : "Post Now 🚀"}
         </button>
       </div>

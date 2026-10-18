@@ -206,10 +206,10 @@ export function ShazamModal({ onClose }: Props) {
             style={{
               width: 140, height: 140, borderRadius: "50%",
               background: state === "listening"
-                ? "linear-gradient(135deg,#38BDF8,#2DD4BF)"
+                ? "linear-gradient(135deg,#38BDF8,#3B82F6,#818CF8)"
                 : state === "processing"
                 ? "linear-gradient(135deg,#1E1E3F,#2D1B69)"
-                : "linear-gradient(135deg,#38BDF8,#164E63)",
+                : "linear-gradient(135deg,#38BDF8,#4F46E5)",
               border: "none",
               display: "flex", flexDirection: "column",
               alignItems: "center", justifyContent: "center", gap: 4,
@@ -258,13 +258,13 @@ export function ShazamModal({ onClose }: Props) {
               <img src={result.cover} alt={result.title}
                 style={{ width: 140, height: 140, borderRadius: 20, objectFit: "cover", boxShadow: "0 16px 48px rgba(56, 189, 248,0.35)" }} />
             ) : (
-              <div style={{ width: 140, height: 140, borderRadius: 20, background: "linear-gradient(135deg,#38BDF8,#2DD4BF)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 48 }}>🎵</div>
+              <div style={{ width: 140, height: 140, borderRadius: 20, background: "linear-gradient(135deg,#38BDF8,#3B82F6,#818CF8)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 48 }}>🎵</div>
             )}
             {/* Verified badge */}
             <div style={{
               position: "absolute", bottom: -8, right: -8,
               width: 32, height: 32, borderRadius: "50%",
-              background: "linear-gradient(135deg,#38BDF8,#164E63)",
+              background: "linear-gradient(135deg,#38BDF8,#4F46E5)",
               display: "flex", alignItems: "center", justifyContent: "center",
               fontSize: 16, boxShadow: "0 4px 12px rgba(56, 189, 248,0.5)",
             }}>✓</div>
@@ -299,7 +299,7 @@ export function ShazamModal({ onClose }: Props) {
                 rel="noopener noreferrer"
                 style={{
                   flex: 1, padding: "12px 8px", borderRadius: 14, textAlign: "center",
-                  background: "linear-gradient(135deg,#38BDF8,#164E63)",
+                  background: "linear-gradient(135deg,#38BDF8,#4F46E5)",
                   color: "#fff", fontSize: 13, fontWeight: 800,
                   textDecoration: "none",
                   boxShadow: "0 4px 16px rgba(56, 189, 248,0.35)",
@@ -327,7 +327,7 @@ export function ShazamModal({ onClose }: Props) {
             onClick={reset}
             style={{
               padding: "14px 40px", borderRadius: 16,
-              background: "linear-gradient(135deg,#38BDF8,#164E63)",
+              background: "linear-gradient(135deg,#38BDF8,#4F46E5)",
               border: "none", color: "#fff", fontSize: 15, fontWeight: 800,
               boxShadow: "0 8px 24px rgba(56, 189, 248,0.4)",
             }}
