@@ -74,7 +74,12 @@ export async function signInWithEmail(email: string, password: string): Promise<
 // ── Register with email/password ──────────────────────────────────────────
 export async function registerWithEmail(email: string, password: string, name: string): Promise<AuthUser> {
   const result = await createUserWithEmailAndPassword(fbAuth, email, password);
-  await updateProfile(result.user, { displayName: name });
+  // Profile update is cosmetic — never let it block or break registration
+  try {
+    await updateProfile(result.user, { displayName: name });
+  } catch {
+    /* the account exists; continue with the local name */
+  }
   return toAuthUser(result.user, { displayName: name });
 }
 

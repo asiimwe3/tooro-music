@@ -28,6 +28,10 @@ export function AuthModal() {
       const code = e?.code || "";
       if (code.includes("invalid-credential") || code.includes("wrong-password") || code.includes("user-not-found")) setError("Incorrect email or password.");
       else if (code.includes("email-already-in-use")) setError("That email is already registered — sign in instead.");
+      else if (code.includes("email-already-in-use")) setError("That email is already registered — sign in instead.");
+      else if (code.includes("network") || code.includes("timeout")) setError("Network problem — check your internet and try again.");
+      else if (code.includes("weak-password")) setError("Password must be at least 6 characters.");
+      else if (code.includes("invalid-email")) setError("That email address looks incorrect.");
       else setError("Something went wrong. Try again.");
     } finally {
       setBusy(false);
