@@ -60,7 +60,7 @@ export function InstallPrompt() {
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 400, background: "rgba(3,6,14,0.72)", backdropFilter: "blur(6px)", display: "flex", alignItems: "flex-end", justifyContent: "center", padding: 16, animation: "fadeIn 0.25s ease" }}>
       <div style={{ width: "100%", maxWidth: 420, borderRadius: 24, background: "linear-gradient(160deg,#0B1526,#060B14)", border: "1px solid rgba(56,189,248,0.25)", boxShadow: "0 -10px 60px rgba(6,182,212,0.25), 0 20px 60px rgba(0,0,0,0.6)", padding: 20, textAlign: "center" }}>
-        <div style={{ width: 64, height: 64, borderRadius: 18, margin: "0 auto 12px", background: "linear-gradient(135deg,#06B6D4,#3B82F6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32, boxShadow: "0 8px 28px rgba(6,182,212,0.5)" }}>🎵</div>
+        <img src="/favicon.png" alt="Tooro Music" style={{ width: 64, height: 64, borderRadius: 18, margin: "0 auto 12px", display: "block", boxShadow: "0 8px 28px rgba(255,138,0,0.35)" }} />
         <div style={{ fontFamily: "'Sora',sans-serif", fontSize: 18, fontWeight: 800, color: "#EAF2FF" }}>Install Tooro Music</div>
         <div style={{ fontSize: 12.5, color: "var(--t2)", marginTop: 6, lineHeight: 1.5 }}>
           {isIOS
