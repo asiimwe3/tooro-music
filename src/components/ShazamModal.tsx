@@ -74,7 +74,6 @@ export function ShazamModal({ onClose }: Props) {
         try {
           const formData = new FormData();
           formData.append("file", blob, "shazam.webm");
-          formData.append("api_token", "43ff42e49e94658053bb77084cbe49bd");
           formData.append("return", "deezer");
 
           const res = await fetch("https://api.audd.io/", {
@@ -83,9 +82,9 @@ export function ShazamModal({ onClose }: Props) {
           });
           const data = await res.json();
 
-          if (data.status === "error" && data.error?.error_code === 900) {
+          if (data.status === "error" && [900, 901].includes(data.error?.error_code)) {
             setState("error");
-            setError("Song recognition is almost live — one API key step remains. Coming soon!");
+            setError("Recognition limit reached — wait a moment and try again.");
             return;
           }
           if (data.status === "success" && data.result) {
