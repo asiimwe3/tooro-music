@@ -117,7 +117,7 @@ for query, name, genre, location in ARTIST_SEEDS:
         songs.append({
             "id": str(len(songs)+1), "title": t["title"], "artist": t["artist"]["name"],
             "artistId": aid, "genre": genre, "duration": fmt_dur(t["duration"]),
-            "plays": fmt_plays(t["rank"]), "audioUrl": t["preview"],
+            "plays": fmt_plays(t["rank"]), "audioUrl": t["preview"], "dzId": t["id"],
             "coverUrl": t["album"]["cover_big"],
             "color": GENRE_COLORS.get(genre,"#8B5CF6"),
             "album": t["album"]["title"], "seed": f"{aid}-{i}"})

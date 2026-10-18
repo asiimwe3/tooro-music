@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppStore } from "../store/appStore";
-import { loadTrackSource, prefetchAudio } from "../lib/audioStore";
+import { loadTrackSource, prefetchAudio, fetchFreshPreview } from "../lib/audioStore";
 import { ensureYT, resolveFullTrack, fullCacheGet, autoFullEnabled, isWebView } from "../lib/fullTrack";
 import { SONGS } from "../data/mock";
 import { CoverArt } from "./CoverArt";
@@ -12,6 +12,7 @@ export function MiniPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const objUrlRef = useRef<string | null>(null);
   const warmedRef = useRef(false);
+  const retryRef = useRef<string | null>(null);
   const ytRef = useRef<any>(null);
   const ytDivRef = useRef<HTMLDivElement | null>(null);
   const watchRef = useRef<any>(null);
@@ -25,7 +26,7 @@ export function MiniPlayer() {
     if (idx < 0) return;
     [SONGS[(idx + 1) % SONGS.length], SONGS[(idx + 2) % SONGS.length]].forEach((s) => {
       const u = (s as any).audioUrl;
-      if (u && !u.startsWith("idb:")) prefetchAudio(u);
+      if (u && !u.startsWith("idb:")) prefetchAudio(u, (s as any).dzId);
     });
   };
   // ── Full-length (YouTube) mode helpers ─────────────────────────────────
@@ -63,7 +64,7 @@ export function MiniPlayer() {
     warmedRef.current = true;
     SONGS.slice(0, 3).forEach((s) => {
       const u = (s as any).audioUrl;
-      if (u && !u.startsWith("idb:")) prefetchAudio(u);
+      if (u && !u.startsWith("idb:")) prefetchAudio(u, (s as any).dzId);
     });
   }, []);
 
@@ -72,6 +73,20 @@ export function MiniPlayer() {
     a.preload = "auto";
     a.volume = volume;
     a.crossOrigin = "anonymous";
+    // Safety net: if the source is dead (Deezer links expire ~daily),
+    // fetch a fresh link and keep playing — silence is never acceptable.
+    a.addEventListener("error", () => {
+      if (!a.src || a.src === window.location.href) return;
+      const song: any = useAppStore.getState().currentSong;
+      if (!song || retryRef.current === song.id || !song.dzId) return;
+      retryRef.current = song.id;
+      fetchFreshPreview(String(song.dzId)).then((fresh) => {
+        if (!fresh || (useAppStore.getState().currentSong as any)?.id !== song.id) return;
+        a.src = fresh;
+        a.load();
+        if (useAppStore.getState().isPlaying) a.play().catch(() => {});
+      });
+    });
     a.addEventListener("timeupdate", () => {
       if (a.duration) { setProgress((a.currentTime / a.duration) * 100); setCurrentTime(a.currentTime); }
     });
@@ -95,7 +110,7 @@ export function MiniPlayer() {
 
       // Fast-start: cached blob (IndexedDB for uploads, Cache API for previews) or raw URL fallback
       const url = song.audioUrl || "";
-      const src = await loadTrackSource(url);
+      const src = await loadTrackSource(url, (song as any).dzId);
       if (!alive()) return;
       if (objUrlRef.current && objUrlRef.current !== src) URL.revokeObjectURL(objUrlRef.current);
       objUrlRef.current = src.startsWith("blob:") ? src : null;

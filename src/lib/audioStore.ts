@@ -136,21 +136,60 @@ async function fetchIntoCache(url: string): Promise<Blob | undefined> {
   return p;
 }
 
-/** Fire-and-forget prefetch so the next tap starts instantly. */
-export async function prefetchAudio(url: string): Promise<void> {
+/** Fire-and-forget prefetch so the next tap starts instantly.
+ *  Falls back to a fresh Deezer link when the bundled one has expired. */
+export async function prefetchAudio(url: string, dzId?: string | number): Promise<void> {
   if (!url || url.startsWith("idb:") || url.startsWith("blob:")) return;
   try {
     const c = await cacheOpen();
     if (c && (await c.match(url))) return; // already cached
-    await fetchIntoCache(url);
+    const blob = await fetchIntoCache(url);
+    if (!blob && dzId) {
+      const fresh = await fetchFreshPreview(String(dzId));
+      if (fresh) await fetchIntoCache(fresh);
+    }
   } catch { /* background best-effort */ }
+}
+
+// ─── Runtime preview-link refresh (Deezer links now expire ~daily) ────────────
+
+const PREVIEW_TTL = 12 * 60 * 60 * 1000; // 12h — fresh Deezer links live ~24h
+
+function previewMemoGet(dzId: string): string | undefined {
+  try {
+    const raw = localStorage.getItem("tm_dzprev_" + dzId);
+    if (!raw) return undefined;
+    const { url, ts } = JSON.parse(raw);
+    if (Date.now() - ts < PREVIEW_TTL) return url;
+  } catch { /* ignore */ }
+  return undefined;
+}
+
+function previewMemoSet(dzId: string, url: string) {
+  try { localStorage.setItem("tm_dzprev_" + dzId, JSON.stringify({ url, ts: Date.now() })); } catch { /* ignore */ }
+}
+
+/** Fetch a fresh, valid 30s preview URL straight from Deezer's public API. */
+export async function fetchFreshPreview(dzId: string): Promise<string | undefined> {
+  if (!dzId) return undefined;
+  const memo = previewMemoGet(dzId);
+  if (memo) return memo;
+  try {
+    const res = await fetch(`https://api.deezer.com/track/${dzId}`);
+    if (!res.ok) return undefined;
+    const data: any = await res.json();
+    const url = data?.preview;
+    if (url) { previewMemoSet(String(dzId), url); return url; }
+  } catch { /* offline → fall through */ }
+  return undefined;
 }
 
 /**
  * Resolve a song's audio into the fastest playable source:
- * IndexedDB blob (uploads) → cached preview blob → fetch & cache → raw URL fallback.
+ * IndexedDB blob (uploads) → cached preview blob → fetch & cache →
+ * fresh Deezer link (bundled links expire ~daily) → raw URL last resort.
  */
-export async function loadTrackSource(url: string): Promise<string> {
+export async function loadTrackSource(url: string, dzId?: string | number): Promise<string> {
   if (!url) return "";
   if (url.startsWith("idb:")) {
     const blob = await getAudio(url.slice(4));
@@ -164,6 +203,16 @@ export async function loadTrackSource(url: string): Promise<string> {
     }
     const blob = await fetchIntoCache(url);
     if (blob) return URL.createObjectURL(blob);
-  } catch { /* fall through to direct streaming */ }
+  } catch { /* fall through */ }
+  if (dzId) {
+    try {
+      const fresh = await fetchFreshPreview(String(dzId));
+      if (fresh) {
+        const blob = await fetchIntoCache(fresh);
+        if (blob) return URL.createObjectURL(blob);
+        return fresh;
+      }
+    } catch { /* fall through */ }
+  }
   return url;
 }
