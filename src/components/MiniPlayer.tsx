@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppStore } from "../store/appStore";
+import { getAudio } from "../lib/audioStore";
 import { CoverArt } from "./CoverArt";
 
 const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2];
@@ -29,12 +30,20 @@ export function MiniPlayer() {
 
   useEffect(() => {
     if (!audioRef.current || !currentSong) return;
-    // Use real Deezer preview URL directly from song data
-    const url = (currentSong as any).audioUrl || "";
-    audioRef.current.src = url;
-    audioRef.current.load();
-    audioRef.current.playbackRate = playbackSpeed;
-    if (isPlaying) audioRef.current.play().catch(() => {});
+    const audio = audioRef.current;
+    (async () => {
+      // Real URL from song data, or an IndexedDB blob for uploaded ("idb:") tracks
+      const url = (currentSong as any).audioUrl || "";
+      let src = url;
+      if (url.startsWith("idb:")) {
+        const blob = await getAudio(url.slice(4));
+        src = blob ? URL.createObjectURL(blob) : "";
+      }
+      audio.src = src;
+      audio.load();
+      audio.playbackRate = playbackSpeed;
+      if (isPlaying) audio.play().catch(() => {});
+    })();
   }, [currentSong]);
 
   useEffect(() => {

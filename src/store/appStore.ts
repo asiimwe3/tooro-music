@@ -25,7 +25,7 @@ export function uploadToSong(u: Upload): Song {
   return {
     id: u.id, seed: u.seed, title: u.title, artist: u.artist, artistId: u.artistId,
     genre: u.genre, duration: u.duration, plays: `${u.plays}`, color: u.color,
-    coverUrl: "", audioUrl: "",
+    coverUrl: "", audioUrl: u.isVideo ? "" : `idb:${u.id}`,
   } as unknown as Song;
 }
 type Page = "home" | "discover" | "trending" | "artist" | "premium" | "library" | "downloads" | "settings";
@@ -123,6 +123,7 @@ export const useAppStore = create<AppState>((set, get) => {
       const next = get().uploads.filter((u) => u.id !== id);
       try { localStorage.setItem("tm_uploads", JSON.stringify(next)); } catch { /* full */ }
       set({ uploads: next });
+      import("../lib/audioStore").then((m) => m.deleteAudio(id)).catch(() => {});
     },
     page: "home",
     setPage: (page) => set({ page }),
