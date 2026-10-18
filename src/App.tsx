@@ -3,6 +3,7 @@ import { useAppStore } from "./store/appStore";
 import { useIsDesktop } from "./hooks/useIsDesktop";
 import { BottomNav } from "./components/BottomNav";
 import { MiniPlayer } from "./components/MiniPlayer";
+import { InstallPrompt } from "./components/InstallPrompt";
 import { Toast } from "./components/Toast";
 import { UploadModal } from "./components/UploadModal";
 import { PaymentModal } from "./components/PaymentModal";
@@ -40,6 +41,7 @@ export default function App() {
     <>
       <AuthModal />
       <MiniPlayer />
+      <InstallPrompt />
       <UploadModal />
       <PaymentModal />
       <Toast />
@@ -64,9 +66,7 @@ export default function App() {
   return (
     <div style={{ background: "transparent", minHeight: "100vh", color: "#fff", paddingBottom: 172 }}>
       <SideMenu />
-      <AuthModal />
       {pages}
-      <MiniPlayer />
       <BottomNav onShazam={() => setShowShazam(true)} />
       {overlays}
     </div>
