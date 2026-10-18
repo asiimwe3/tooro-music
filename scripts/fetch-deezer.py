@@ -6,6 +6,9 @@ import json, re, time, urllib.request
 # (deezer search name, display name, genre, location)
 ARTIST_SEEDS = [
     # Uganda
+    # — Tooro Music own artists: anything released under these names on Deezer
+    #   flows into the app automatically at every monthly catalog refresh —
+    ("Derick Fan","Derick Fan","Afrobeat","Uganda"),
     ("Fik Fameica","Fik Fameica","Afrobeat","Uganda"),("Winnie Nwagi","Winnie Nwagi","Afropop","Uganda"),
     ("Azawi","Azawi","Afrofusion","Uganda"),("King Saha","King Saha","Ragga","Uganda"),
     ("Ziza Bafana","Ziza Bafana","Dancehall","Uganda"),("Jose Chameleone","Jose Chameleone","Afrobeat","Uganda"),
