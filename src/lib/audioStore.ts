@@ -195,24 +195,27 @@ export async function loadTrackSource(url: string, dzId?: string | number): Prom
     const blob = await getAudio(url.slice(4));
     return blob ? URL.createObjectURL(blob) : "";
   }
+  // 1) Instant path: cached blob (no network)
   try {
     const c = await cacheOpen();
     if (c) {
       const hit = await c.match(url);
       if (hit) return URL.createObjectURL(await hit.blob());
     }
-    const blob = await fetchIntoCache(url);
-    if (blob) return URL.createObjectURL(blob);
   } catch { /* fall through */ }
+  // 2) Bundled link may be expired (Deezer links live ~24h) — resolve a
+  //    fresh one via the public API (fast, ~200-400ms) and STREAM it
+  //    immediately. Never wait for a full download before playback: on slow
+  //    mobile networks the gesture window can expire and play() gets refused.
   if (dzId) {
     try {
       const fresh = await fetchFreshPreview(String(dzId));
       if (fresh) {
-        const blob = await fetchIntoCache(fresh);
-        if (blob) return URL.createObjectURL(blob);
+        prefetchAudio(fresh).catch(() => {}); // warm cache for next time
         return fresh;
       }
     } catch { /* fall through */ }
   }
+  prefetchAudio(url, dzId).catch(() => {});
   return url;
 }

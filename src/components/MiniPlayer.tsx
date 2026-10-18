@@ -13,6 +13,17 @@ export function MiniPlayer() {
   const objUrlRef = useRef<string | null>(null);
   const warmedRef = useRef(false);
   const retryRef = useRef<string | null>(null);
+  // Play honestly: if the browser refuses playback (rare, gesture window
+  // expired on slow networks), reflect paused state instead of faking "playing".
+  const safePlay = (a: HTMLAudioElement | null | undefined) => {
+    if (!a) return;
+    a.play().catch((e: any) => {
+      if (e?.name === "NotAllowedError") {
+        const st = useAppStore.getState();
+        if (st.isPlaying) st.togglePlay();
+      }
+    });
+  };
   const ytRef = useRef<any>(null);
   const ytDivRef = useRef<HTMLDivElement | null>(null);
   const watchRef = useRef<any>(null);
@@ -37,7 +48,7 @@ export function MiniPlayer() {
     try { ytRef.current?.stopVideo?.(); } catch { /* ignore */ }
     if (fullId) setFullId(null);
     setFullAvail(null);
-    if (!silent) { const a = audioRef.current; if (a && useAppStore.getState().isPlaying) a.play().catch(() => {}); }
+    if (!silent) { const a = audioRef.current; if (a && useAppStore.getState().isPlaying) safePlay(a); }
   };
 
   const enterFull = (videoId: string) => {
@@ -48,7 +59,7 @@ export function MiniPlayer() {
     // Fallback watchdog: if the YouTube player hasn't started in time, resume the preview
     watchRef.current = setTimeout(() => {
       const st = (() => { try { return ytRef.current?.getPlayerState?.(); } catch { return -1; } })();
-      if (st !== 1) { exitFull(true); const a = audioRef.current; if (a && useAppStore.getState().isPlaying) a.play().catch(() => {}); showToast("Full song unavailable — playing preview"); }
+      if (st !== 1) { exitFull(true); const a = audioRef.current; if (a && useAppStore.getState().isPlaying) safePlay(a); showToast("Full song unavailable — playing preview"); }
     }, 3500);
   };
 
@@ -84,7 +95,7 @@ export function MiniPlayer() {
         if (!fresh || (useAppStore.getState().currentSong as any)?.id !== song.id) return;
         a.src = fresh;
         a.load();
-        if (useAppStore.getState().isPlaying) a.play().catch(() => {});
+        if (useAppStore.getState().isPlaying) safePlay(a);
       });
     });
     a.addEventListener("timeupdate", () => {
@@ -117,7 +128,7 @@ export function MiniPlayer() {
       audio.src = src;
       audio.load();
       audio.playbackRate = playbackSpeed;
-      if (useAppStore.getState().isPlaying) audio.play().catch(() => {});
+      if (useAppStore.getState().isPlaying) safePlay(audio);
       prefetchNeighbors(song.id);
 
       // Uploaded songs play from device storage — already full length
@@ -154,7 +165,7 @@ export function MiniPlayer() {
       try { if (isPlaying) ytRef.current.playVideo(); else ytRef.current.pauseVideo(); return; } catch { /* fall through */ }
     }
     if (!audioRef.current) return;
-    if (isPlaying) audioRef.current.play().catch(() => {}); else audioRef.current.pause();
+    if (isPlaying) safePlay(audioRef.current); else audioRef.current.pause();
   }, [isPlaying, fullId]);
 
   useEffect(() => {
@@ -206,7 +217,7 @@ export function MiniPlayer() {
               // paused externally: reflect in UI
             }
           },
-          onError: () => { exitFull(true); const a = audioRef.current; if (a && useAppStore.getState().isPlaying) a.play().catch(() => {}); showToast("Full song unavailable — playing preview"); },
+          onError: () => { exitFull(true); const a = audioRef.current; if (a && useAppStore.getState().isPlaying) safePlay(a); showToast("Full song unavailable — playing preview"); },
         },
       });
       if (isPlaying) try { ytRef.current.playVideo(); } catch { /* ignore */ }
