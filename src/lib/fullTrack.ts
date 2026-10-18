@@ -81,7 +81,21 @@ export function ensureYT(): Promise<any> {
   return ytPromise;
 }
 
-/** User preference: auto-switch to full-length playback (default on). */
+/**
+ * Android WebView does not support the YouTube IFrame API and can go
+ * silent on programmatic play. Detect it so full-song auto-handover
+ * never mutes the app there; previews (always reliable) play instead.
+ */
+export function isWebView(): boolean {
+  if (/;\s*wv\)/i.test(window.navigator.userAgent)) return true;
+  if (/Android/i.test(window.navigator.userAgent) && !/Chrome\/[.0-9]+ Mobile/i.test(window.navigator.userAgent)) return true;
+  return false;
+}
+
+/** User preference: auto-switch to full-length playback. Default OFF so the
+ *  reliable preview always sounds; full songs play via the ▶ FULL chip or
+ *  by enabling "Play full songs" in Settings. Never auto in WebView. */
 export function autoFullEnabled(): boolean {
-  return localStorage.getItem("tm_autofull") !== "0";
+  if (isWebView()) return false;
+  return localStorage.getItem("tm_autofull") === "1";
 }

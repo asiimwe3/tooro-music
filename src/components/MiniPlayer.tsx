@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppStore } from "../store/appStore";
 import { loadTrackSource, prefetchAudio } from "../lib/audioStore";
-import { ensureYT, resolveFullTrack, fullCacheGet, autoFullEnabled } from "../lib/fullTrack";
+import { ensureYT, resolveFullTrack, fullCacheGet, autoFullEnabled, isWebView } from "../lib/fullTrack";
 import { SONGS } from "../data/mock";
 import { CoverArt } from "./CoverArt";
 
@@ -48,7 +48,7 @@ export function MiniPlayer() {
     watchRef.current = setTimeout(() => {
       const st = (() => { try { return ytRef.current?.getPlayerState?.(); } catch { return -1; } })();
       if (st !== 1) { exitFull(true); const a = audioRef.current; if (a && useAppStore.getState().isPlaying) a.play().catch(() => {}); showToast("Full song unavailable — playing preview"); }
-    }, 5000);
+    }, 3500);
   };
 
   const [expanded, setExpanded] = useState(false);
@@ -107,6 +107,9 @@ export function MiniPlayer() {
 
       // Uploaded songs play from device storage — already full length
       if (url.startsWith("idb:")) return;
+
+      // Android WebView: YouTube player unsupported — keep reliable preview audio only
+      if (isWebView()) return;
 
       // Catalog song: start resolving the full-length version in the background
       const cached = fullCacheGet(song.id);
@@ -168,6 +171,9 @@ export function MiniPlayer() {
         videoId: fullId,
         playerVars: { playsinline: 1, controls: 0, modestbranding: 1, rel: 0, iv_load_policy: 3 },
         events: {
+          onReady: () => {
+            try { ytRef.current.setVolume(volume * 100); if (isPlaying) ytRef.current.playVideo(); } catch { /* ignore */ }
+          },
           onStateChange: (e: any) => {
             if (e.data === 1) {
               // Playing: hand over from the preview, continuing at the same position
